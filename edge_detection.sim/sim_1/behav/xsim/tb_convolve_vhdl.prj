@@ -1,0 +1,8 @@
+# compile vhdl design source files
+vhdl xil_defaultlib  \
+"../../../../edge_detection.srcs/sources_1/ip/blk_mem_gen_0/blk_mem_gen_0_sim_netlist.vhdl" \
+"../../../../edge_detection.srcs/sources_1/new/convolve.vhd" \
+"../../../../edge_detection.srcs/sim_1/new/tb_convolve.vhd" \
+
+# Do not sort compile order
+nosort
