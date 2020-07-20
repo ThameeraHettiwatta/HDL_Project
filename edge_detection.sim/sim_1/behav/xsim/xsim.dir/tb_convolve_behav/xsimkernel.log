@@ -1,0 +1,4 @@
+Running: xsim.dir/tb_convolve_behav/xsimk -simmode gui -wdb tb_convolve_behav.wdb -simrunnum 0 -socket 41509
+Design successfully loaded
+Design Loading Memory Usage: 44736 KB (Peak: 44736 KB)
+Design Loading CPU Usage: 20 ms

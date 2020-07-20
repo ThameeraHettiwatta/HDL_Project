@@ -1,0 +1,1 @@
+-wto "6bb8bf578a9e4aa09ef36645183d6b7a" --incr --debug "typical" --relax --mt "8" -L "xil_defaultlib" -L "secureip" -L "xpm" --snapshot "tb_convolve_behav" "xil_defaultlib.tb_convolve" -log "elaborate.log" 
