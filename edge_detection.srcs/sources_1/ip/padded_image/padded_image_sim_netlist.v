@@ -1,10 +1,10 @@
 // Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2019.2 (win64) Build 2708876 Wed Nov  6 21:40:23 MST 2019
-// Date        : Mon Jul 20 20:06:51 2020
-// Host        : THAMEERA-PC running 64-bit major release  (build 9200)
-// Command     : write_verilog -force -mode funcsim {d:/thameera/ACA
-//               Folder/sem8/hdl/project/HDL_Project/edge_detection.srcs/sources_1/ip/padded_image/padded_image_sim_netlist.v}
+// Date        : Tue Jul 21 11:35:13 2020
+// Host        : SkyNet running 64-bit major release  (build 9200)
+// Command     : write_verilog -force -mode funcsim
+//               D:/code/HDL/HDL_Project/edge_detection.srcs/sources_1/ip/padded_image/padded_image_sim_netlist.v
 // Design      : padded_image
 // Purpose     : This verilog netlist is a functional simulation representation of the design and should not be modified
 //               or synthesized. This netlist cannot be used for SDF annotated simulation.
@@ -108,9 +108,9 @@ module padded_image
   (* C_INITA_VAL = "0" *) 
   (* C_INITB_VAL = "0" *) 
   (* C_INIT_FILE = "padded_image.mem" *) 
-  (* C_INIT_FILE_NAME = "no_coe_file_loaded" *) 
+  (* C_INIT_FILE_NAME = "padded_image.mif" *) 
   (* C_INTERFACE_TYPE = "0" *) 
-  (* C_LOAD_INIT_FILE = "0" *) 
+  (* C_LOAD_INIT_FILE = "1" *) 
   (* C_MEM_TYPE = "2" *) 
   (* C_MUX_PIPELINE_STAGES = "0" *) 
   (* C_PRIM_TYPE = "1" *) 
@@ -289,7 +289,7 @@ module padded_image_blk_mem_gen_prim_width
   wire [0:0]wea;
   wire [0:0]web;
 
-  padded_image_blk_mem_gen_prim_wrapper \prim_noinit.ram 
+  padded_image_blk_mem_gen_prim_wrapper_init \prim_init.ram 
        (.addra(addra),
         .addrb(addrb),
         .clka(clka),
@@ -302,8 +302,8 @@ module padded_image_blk_mem_gen_prim_width
         .web(web));
 endmodule
 
-(* ORIG_REF_NAME = "blk_mem_gen_prim_wrapper" *) 
-module padded_image_blk_mem_gen_prim_wrapper
+(* ORIG_REF_NAME = "blk_mem_gen_prim_wrapper_init" *) 
+module padded_image_blk_mem_gen_prim_wrapper_init
    (douta,
     doutb,
     clka,
@@ -368,10 +368,10 @@ module padded_image_blk_mem_gen_prim_wrapper
     .INITP_05(256'h0000000000000000000000000000000000000000000000000000000000000000),
     .INITP_06(256'h0000000000000000000000000000000000000000000000000000000000000000),
     .INITP_07(256'h0000000000000000000000000000000000000000000000000000000000000000),
-    .INIT_00(256'h0000000000000000000000000000000000000000000000000000000000000000),
-    .INIT_01(256'h0000000000000000000000000000000000000000000000000000000000000000),
-    .INIT_02(256'h0000000000000000000000000000000000000000000000000000000000000000),
-    .INIT_03(256'h0000000000000000000000000000000000000000000000000000000000000000),
+    .INIT_00(256'h00AB00AB005E005E00940081008400A300A3005E005E00940081008400A300A3),
+    .INIT_01(256'h0088007C00B400B400990099002F006B004100AF00AF008E008E00C900A8006E),
+    .INIT_02(256'h006400D4008E003500AE00AE0064006400D4008E003500AE00AE00D700D70058),
+    .INIT_03(256'h0000000000000000000000000000000000000000000000000000000000000064),
     .INIT_04(256'h0000000000000000000000000000000000000000000000000000000000000000),
     .INIT_05(256'h0000000000000000000000000000000000000000000000000000000000000000),
     .INIT_06(256'h0000000000000000000000000000000000000000000000000000000000000000),
@@ -543,7 +543,7 @@ endmodule
 (* C_HAS_REGCEA = "0" *) (* C_HAS_REGCEB = "0" *) (* C_HAS_RSTA = "0" *) 
 (* C_HAS_RSTB = "0" *) (* C_HAS_SOFTECC_INPUT_REGS_A = "0" *) (* C_HAS_SOFTECC_OUTPUT_REGS_B = "0" *) 
 (* C_INITA_VAL = "0" *) (* C_INITB_VAL = "0" *) (* C_INIT_FILE = "padded_image.mem" *) 
-(* C_INIT_FILE_NAME = "no_coe_file_loaded" *) (* C_INTERFACE_TYPE = "0" *) (* C_LOAD_INIT_FILE = "0" *) 
+(* C_INIT_FILE_NAME = "padded_image.mif" *) (* C_INTERFACE_TYPE = "0" *) (* C_LOAD_INIT_FILE = "1" *) 
 (* C_MEM_TYPE = "2" *) (* C_MUX_PIPELINE_STAGES = "0" *) (* C_PRIM_TYPE = "1" *) 
 (* C_READ_DEPTH_A = "729" *) (* C_READ_DEPTH_B = "729" *) (* C_READ_LATENCY_A = "1" *) 
 (* C_READ_LATENCY_B = "1" *) (* C_READ_WIDTH_A = "8" *) (* C_READ_WIDTH_B = "8" *) 

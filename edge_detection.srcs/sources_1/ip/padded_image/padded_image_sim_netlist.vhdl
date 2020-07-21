@@ -1,10 +1,10 @@
 -- Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2019.2 (win64) Build 2708876 Wed Nov  6 21:40:23 MST 2019
--- Date        : Mon Jul 20 20:06:51 2020
--- Host        : THAMEERA-PC running 64-bit major release  (build 9200)
--- Command     : write_vhdl -force -mode funcsim {d:/thameera/ACA
---               Folder/sem8/hdl/project/HDL_Project/edge_detection.srcs/sources_1/ip/padded_image/padded_image_sim_netlist.vhdl}
+-- Date        : Tue Jul 21 11:35:13 2020
+-- Host        : SkyNet running 64-bit major release  (build 9200)
+-- Command     : write_vhdl -force -mode funcsim
+--               D:/code/HDL/HDL_Project/edge_detection.srcs/sources_1/ip/padded_image/padded_image_sim_netlist.vhdl
 -- Design      : padded_image
 -- Purpose     : This VHDL netlist is a functional simulation representation of the design and should not be modified or
 --               synthesized. This netlist cannot be used for SDF annotated simulation.
@@ -14,7 +14,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity padded_image_blk_mem_gen_prim_wrapper is
+entity padded_image_blk_mem_gen_prim_wrapper_init is
   port (
     douta : out STD_LOGIC_VECTOR ( 7 downto 0 );
     doutb : out STD_LOGIC_VECTOR ( 7 downto 0 );
@@ -28,10 +28,10 @@ entity padded_image_blk_mem_gen_prim_wrapper is
     web : in STD_LOGIC_VECTOR ( 0 to 0 )
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of padded_image_blk_mem_gen_prim_wrapper : entity is "blk_mem_gen_prim_wrapper";
-end padded_image_blk_mem_gen_prim_wrapper;
+  attribute ORIG_REF_NAME of padded_image_blk_mem_gen_prim_wrapper_init : entity is "blk_mem_gen_prim_wrapper_init";
+end padded_image_blk_mem_gen_prim_wrapper_init;
 
-architecture STRUCTURE of padded_image_blk_mem_gen_prim_wrapper is
+architecture STRUCTURE of padded_image_blk_mem_gen_prim_wrapper_init is
   signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM18.ram_n_0\ : STD_LOGIC;
   signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM18.ram_n_1\ : STD_LOGIC;
   signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM18.ram_n_16\ : STD_LOGIC;
@@ -67,10 +67,10 @@ begin
       INITP_05 => X"0000000000000000000000000000000000000000000000000000000000000000",
       INITP_06 => X"0000000000000000000000000000000000000000000000000000000000000000",
       INITP_07 => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_00 => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_01 => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_02 => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_03 => X"0000000000000000000000000000000000000000000000000000000000000000",
+      INIT_00 => X"00AB00AB005E005E00940081008400A300A3005E005E00940081008400A300A3",
+      INIT_01 => X"0088007C00B400B400990099002F006B004100AF00AF008E008E00C900A8006E",
+      INIT_02 => X"006400D4008E003500AE00AE0064006400D4008E003500AE00AE00D700D70058",
+      INIT_03 => X"0000000000000000000000000000000000000000000000000000000000000064",
       INIT_04 => X"0000000000000000000000000000000000000000000000000000000000000000",
       INIT_05 => X"0000000000000000000000000000000000000000000000000000000000000000",
       INIT_06 => X"0000000000000000000000000000000000000000000000000000000000000000",
@@ -230,7 +230,7 @@ end padded_image_blk_mem_gen_prim_width;
 
 architecture STRUCTURE of padded_image_blk_mem_gen_prim_width is
 begin
-\prim_noinit.ram\: entity work.padded_image_blk_mem_gen_prim_wrapper
+\prim_init.ram\: entity work.padded_image_blk_mem_gen_prim_wrapper_init
      port map (
       addra(9 downto 0) => addra(9 downto 0),
       addrb(9 downto 0) => addrb(9 downto 0),
@@ -510,11 +510,11 @@ entity padded_image_blk_mem_gen_v8_4_4 is
   attribute C_INIT_FILE : string;
   attribute C_INIT_FILE of padded_image_blk_mem_gen_v8_4_4 : entity is "padded_image.mem";
   attribute C_INIT_FILE_NAME : string;
-  attribute C_INIT_FILE_NAME of padded_image_blk_mem_gen_v8_4_4 : entity is "no_coe_file_loaded";
+  attribute C_INIT_FILE_NAME of padded_image_blk_mem_gen_v8_4_4 : entity is "padded_image.mif";
   attribute C_INTERFACE_TYPE : integer;
   attribute C_INTERFACE_TYPE of padded_image_blk_mem_gen_v8_4_4 : entity is 0;
   attribute C_LOAD_INIT_FILE : integer;
-  attribute C_LOAD_INIT_FILE of padded_image_blk_mem_gen_v8_4_4 : entity is 0;
+  attribute C_LOAD_INIT_FILE of padded_image_blk_mem_gen_v8_4_4 : entity is 1;
   attribute C_MEM_TYPE : integer;
   attribute C_MEM_TYPE of padded_image_blk_mem_gen_v8_4_4 : entity is 2;
   attribute C_MUX_PIPELINE_STAGES : integer;
@@ -786,11 +786,11 @@ architecture STRUCTURE of padded_image is
   attribute C_INIT_FILE : string;
   attribute C_INIT_FILE of U0 : label is "padded_image.mem";
   attribute C_INIT_FILE_NAME : string;
-  attribute C_INIT_FILE_NAME of U0 : label is "no_coe_file_loaded";
+  attribute C_INIT_FILE_NAME of U0 : label is "padded_image.mif";
   attribute C_INTERFACE_TYPE : integer;
   attribute C_INTERFACE_TYPE of U0 : label is 0;
   attribute C_LOAD_INIT_FILE : integer;
-  attribute C_LOAD_INIT_FILE of U0 : label is 0;
+  attribute C_LOAD_INIT_FILE of U0 : label is 1;
   attribute C_MEM_TYPE : integer;
   attribute C_MEM_TYPE of U0 : label is 2;
   attribute C_MUX_PIPELINE_STAGES : integer;

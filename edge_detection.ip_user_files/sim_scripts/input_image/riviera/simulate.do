@@ -1,7 +1,7 @@
 onbreak {quit -force}
 onerror {quit -force}
 
-asim -t 1ps +access +r +m+input_image -L xpm -L xil_defaultlib -L unisims_ver -L unimacro_ver -L secureip -O5 xil_defaultlib.input_image xil_defaultlib.glbl
+asim -t 1ps +access +r +m+input_image -L xil_defaultlib -L secureip -O5 xil_defaultlib.input_image
 
 do {wave.do}
 

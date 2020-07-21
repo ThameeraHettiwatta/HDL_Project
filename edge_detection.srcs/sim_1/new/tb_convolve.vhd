@@ -52,7 +52,7 @@ component convolve is
            
 end component;
 
-component blk_mem_gen_0 is
+component padded_image is
 
   port (clka : IN STD_LOGIC;
         wea : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
@@ -69,7 +69,7 @@ end component;
 --define signals
 signal input_img : STD_LOGIC_VECTOR (7 downto 0);                    
 signal output_img : STD_LOGIC_VECTOR (7 downto 0);                  
-signal clock : STD_LOGIC;
+signal clock : STD_LOGIC := '1';
 signal reset : STD_LOGIC;
 signal enable_in : STD_LOGIC;                                      
 signal enable_out : STD_LOGIC;                                    
@@ -93,7 +93,7 @@ begin
                input_img_address => input_img_address,    
                output_img_address => output_img_address); 
     
-    input_ram : blk_mem_gen_0
+    input_ram : padded_image
         port map ( clka => clock,                    
                wea => "0",                 
                addra => input_img_address,
@@ -113,6 +113,7 @@ begin
             enable_in <= '0';
             wait for 20ns;
             
+            reset <= '0';
             enable_in <= '1';
             wait;
             
