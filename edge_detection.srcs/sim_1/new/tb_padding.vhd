@@ -65,19 +65,19 @@ component input_image is
         doutb : OUT STD_LOGIC_VECTOR(7 DOWNTO 0));
 end component;
 
---component padded_image is
+component padded_image is
 
---  port (clka : IN STD_LOGIC;
---        wea : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
---        addra : IN STD_LOGIC_VECTOR(9 DOWNTO 0);
---        dina : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
---        douta : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
---        clkb : IN STD_LOGIC;
---        web : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
---        addrb : IN STD_LOGIC_VECTOR(9 DOWNTO 0);
---        dinb : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
---        pad_doutb : OUT STD_LOGIC_VECTOR(7 DOWNTO 0));
---end component;
+  port (clka : IN STD_LOGIC;
+        wea : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
+        addra : IN STD_LOGIC_VECTOR(9 DOWNTO 0);
+        dina : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+        douta : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
+        clkb : IN STD_LOGIC;
+        web : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
+        addrb : IN STD_LOGIC_VECTOR(9 DOWNTO 0);
+        dinb : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+        doutb : OUT STD_LOGIC_VECTOR(7 DOWNTO 0));
+end component;
 
 --define signals
 signal input_img : STD_LOGIC_VECTOR (7 downto 0);                    
@@ -91,7 +91,8 @@ signal output_img_enable : STD_LOGIC_VECTOR(0 DOWNTO 0);
 signal input_img_address : STD_LOGIC_VECTOR (9 downto 0);         
 signal output_img_address : STD_LOGIC_VECTOR (9 downto 0);  
 signal doutb : STD_LOGIC_VECTOR(7 DOWNTO 0);
---signal pad_doutb : STD_LOGIC_VECTOR(7 DOWNTO 0);
+signal pad_douta : STD_LOGIC_VECTOR(7 DOWNTO 0);
+signal pad_doutb : STD_LOGIC_VECTOR(7 DOWNTO 0);
 
 begin
 
@@ -119,17 +120,17 @@ begin
                dinb => "00000000",    
                doutb => doutb); 
 
---    output_ram : padded_image
---        port map ( clka => clock,                    
---               wea => output_img_enable,                 
---               addra => output_img_address,
---               dina => output_img,
---               douta => "00000000",                                      
---               clkb => clock,                                  
---               web => "0",           
---               addrb => "0000000000",     
---               dinb => "00000000",    
---               pad_doutb => pad_doutb); 
+    output_ram : padded_image
+        port map ( clka => clock,                    
+               wea => output_img_enable,                 
+               addra => output_img_address,
+               dina => output_img,
+               douta => pad_douta,                                      
+               clkb => clock,                                  
+               web => "0",           
+               addrb => "0000000000",     
+               dinb => "00000000",    
+               doutb => pad_doutb); 
         
     clock <= not clock after 5ns;
 

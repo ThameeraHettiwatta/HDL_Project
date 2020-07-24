@@ -64,8 +64,9 @@ process (clock, input_img, reset, enable_in)
     variable pad_y_index : integer := 0;                                                --vertical index of output image pixel
     variable img_x_index : integer := 0;                                                --horizontal index of output image pixel
     variable img_y_index : integer := 0;                                                --vertical index of output image pixel
-    variable read_delay : integer := 0;                                                 --ram read delay counter
-    variable write_delay : integer := 0;                                                --ram write delay counter
+    variable read_delay : integer := 3;                                                 --ram read delay counter
+    variable write_delay : integer := 3;                                                --ram write delay counter
+    
     begin
     
     --reset to initial state
@@ -110,24 +111,25 @@ process (clock, input_img, reset, enable_in)
                  end if;      
                  
                  
-                 if (read_delay = 3) then 
-                     read_delay := 0;          
+                 if (write_delay = 0) then 
+                     read_delay := 4;       
                      input_img_address <= std_logic_vector(to_unsigned((input_width*img_y_index) + img_x_index, address_width));
                      -- input_img_enable <= "0"; no need to disable since its never enabled 
---                 end if;
+                 end if;
                   
-                  
---                 if (write_delay = 3) then
---                     write_delay := 0;                   
-                     output_img_address <= std_logic_vector(to_unsigned(output_pixel_counter, address_width));
+                              
+                     
+                 if (read_delay = 0) then
+                     write_delay := 4;   
+                     output_img_address <= std_logic_vector(to_unsigned(output_pixel_counter, address_width));                 
                      output_img <= input_img;
                      output_img_enable <= "1";
                      output_pixel_counter := output_pixel_counter + 1;
                  end if;
                         
                      
-                 read_delay := read_delay + 1;
---                 write_delay := write_delay + 1;
+                 read_delay := read_delay - 1;
+                 write_delay := write_delay - 1;
                  
              end if;
         end if;

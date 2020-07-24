@@ -1,7 +1,7 @@
-Running: xsim.dir/tb_padding_behav/xsimk.exe -simmode gui -wdb tb_padding_behav.wdb -simrunnum 0 -socket 50360
+Running: xsim.dir/tb_padding_behav/xsimk.exe -simmode gui -wdb tb_padding_behav.wdb -simrunnum 0 -socket 52477
 Design successfully loaded
-Design Loading Memory Usage: 5956 KB (Peak: 5956 KB)
+Design Loading Memory Usage: 6472 KB (Peak: 6472 KB)
 Design Loading CPU Usage: 15 ms
 Simulation completed
-Simulation Memory Usage: 6756 KB (Peak: 6756 KB)
-Simulation CPU Usage: 15 ms
+Simulation Memory Usage: 7680 KB (Peak: 7680 KB)
+Simulation CPU Usage: 31 ms
