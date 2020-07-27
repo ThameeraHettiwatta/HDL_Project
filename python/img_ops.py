@@ -60,6 +60,25 @@ def padding(img, img_width):
 
     return output_img
 
+
+def write_to_hex(img, filename):
+    #img = np.array(img).astype(int)
+    file = open(filename, 'w')
+    for pixel in img:
+        file.write(str(hex(pixel))[2:])
+        file.write(' ')
+    file.close()
+
+def hex_to_img(filename):
+    img = []
+    file = open(filename, 'r')
+    for val in file.readlines():
+        img.append(int(val))
+    #print(img)
+    output = np.array(img).reshape([width, height])
+    cv2.imwrite("output.bmp", output)
+
+"""
 def write_to_hex(img, filename):
     #img = np.array(img).astype(int)
     file = open(filename, 'w')
@@ -71,7 +90,7 @@ def write_to_hex(img, filename):
         file.write(str(pixel))
         file.write('\n')
         index += 1
-    file.close()
+    file.close()"""
 
 kernel = [-1, -1, -1, -1, 8, -1, -1, -1, -1]
 kernel_width = 3
@@ -80,7 +99,7 @@ kernel_width = 3
 image = cv2.imread('lena_gray.bmp', cv2.IMREAD_GRAYSCALE)
 
 #crop
-cropped = cv2.resize(image, (5,5))
+cropped = cv2.resize(image, (25,25))
 width, height = cropped.shape
 print (width, height)
 
@@ -93,16 +112,19 @@ write_to_hex(serial, "hex_input.txt")
 padded = padding(serial, width)
 padded_img = np.array(padded).reshape([width+2, height+2])
 cv2.imwrite("padded_out.bmp", padded_img)
-print(padded)
+#print(padded)
 
 write_to_hex(padded, "hex_padded.txt")
 
 #apply filter
 filtered = convolve(padded, kernel, width+2, kernel_width)
+filtered_img = np.array(filtered).reshape([width, height])
+cv2.imwrite("filtered_out.bmp", filtered_img)
 
 write_to_hex(filtered, "hex_filtered.txt")
-print(filtered)
+#print(filtered)
 
 # #write output
 # filtered = np.array(filtered).reshape([width, height])
 # cv2.imwrite("lena_out.bmp", filtered)
+#hex_to_img("convoluted_ram.txt")

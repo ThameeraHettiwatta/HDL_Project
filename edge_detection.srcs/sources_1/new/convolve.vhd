@@ -33,7 +33,7 @@ use IEEE.NUMERIC_STD.ALL;
 
 entity convolve is generic (
      pixel_depth: integer := 8;                                                         --bit depth of an individual pixel
-     input_width : integer := 7;                                                        --width of input image in pixels
+     input_width : integer := 27;                                                        --width of input image in pixels
      address_width : integer := 10);                                                    --width of memory address (can address upto 2^10 individual pixels)
 
     Port ( input_img : in STD_LOGIC_VECTOR (pixel_depth-1 downto 0);                    -- data bus for incoming image (input ram)

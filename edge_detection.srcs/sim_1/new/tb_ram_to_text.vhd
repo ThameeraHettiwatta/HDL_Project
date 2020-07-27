@@ -212,8 +212,8 @@ begin
         begin
             if ( clock 'event and clock = '1' ) then
                 if ( output_img_enable = "1" ) then
-                    write(out_value, to_integer(unsigned(output_img_address)), left, 3);
-                    write(out_value, string'(","));
+                    --write(out_value, to_integer(unsigned(output_img_address)), left, 3);
+                    --write(out_value, string'(","));
                     write(out_value, to_integer(unsigned(data_out)), left, 3);
                     writeline(convoluted_ram, out_value);
                 end if;

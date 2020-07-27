@@ -2,11 +2,11 @@
 # Vivado v2019.2 (64-bit)
 # SW Build 2708876 on Wed Nov  6 21:40:23 MST 2019
 # IP Build 2700528 on Thu Nov  7 00:09:20 MST 2019
-# Start of session at: Thu Jul 23 21:56:30 2020
-# Process ID: 5624
-# Current directory: D:/thameera/ACA Folder/sem8/hdl/project/HDL_Project/edge_detection.runs/padded_image_synth_1
+# Start of session at: Fri Jul 24 21:37:19 2020
+# Process ID: 24260
+# Current directory: D:/code/HDL/HDL_Project/edge_detection.runs/padded_image_synth_1
 # Command line: vivado.exe -log padded_image.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source padded_image.tcl
-# Log file: D:/thameera/ACA Folder/sem8/hdl/project/HDL_Project/edge_detection.runs/padded_image_synth_1/padded_image.vds
-# Journal file: D:/thameera/ACA Folder/sem8/hdl/project/HDL_Project/edge_detection.runs/padded_image_synth_1\vivado.jou
+# Log file: D:/code/HDL/HDL_Project/edge_detection.runs/padded_image_synth_1/padded_image.vds
+# Journal file: D:/code/HDL/HDL_Project/edge_detection.runs/padded_image_synth_1\vivado.jou
 #-----------------------------------------------------------
 source padded_image.tcl -notrace

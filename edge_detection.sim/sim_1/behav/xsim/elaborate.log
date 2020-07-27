@@ -1,7 +1,8 @@
 Vivado Simulator 2019.2
 Copyright 1986-1999, 2001-2019 Xilinx, Inc. All Rights Reserved.
-Running: C:/Xilinx/Vivado/2019.2/bin/unwrapped/win64.o/xelab.exe -wto 6bb8bf578a9e4aa09ef36645183d6b7a --incr --debug typical --relax --mt 2 -L xil_defaultlib -L secureip -L xpm --snapshot tb_padding_behav xil_defaultlib.tb_padding -log elaborate.log 
+Running: E:/Xilinx/Vivado/2019.2/bin/unwrapped/win64.o/xelab.exe -wto 6bb8bf578a9e4aa09ef36645183d6b7a --incr --debug typical --relax --mt 2 -L xil_defaultlib -L secureip -L xpm --snapshot tb_ram_to_text_behav xil_defaultlib.tb_ram_to_text -log elaborate.log 
 Using 2 slave threads.
 Starting static elaboration
-Completed static elaboration
-INFO: [XSIM 43-4323] No Change in HDL. Linking previously generated obj files to create kernel
+ERROR: [VRFC 10-664] expression has 10 elements ; expected 14 [D:/code/HDL/HDL_Project/edge_detection.srcs/sim_1/new/tb_ram_to_text.vhd:96]
+ERROR: [VRFC 10-664] expression has 10 elements ; expected 14 [D:/code/HDL/HDL_Project/edge_detection.srcs/sim_1/new/tb_ram_to_text.vhd:101]
+ERROR: [XSIM 43-3321] Static elaboration of top level VHDL design unit tb_ram_to_text in library work failed.
