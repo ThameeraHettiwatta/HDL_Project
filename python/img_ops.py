@@ -65,12 +65,12 @@ def write_to_hex(img, filename):
     file = open(filename, 'w')
     index = 0
     for pixel in img:
-        # file.write(str(hex(pixel))[2:])
-        file.write(str(index))
-        file.write(' ,')
-        file.write(str(pixel))
-        file.write('\n')
-        index += 1
+        file.write(str(hex(pixel))[2:])
+        # file.write(str(index))
+        file.write(' ')
+        # file.write(str(pixel))
+        # file.write('\n')
+        # index += 1
     file.close()
 
 kernel = [-1, -1, -1, -1, 8, -1, -1, -1, -1]
@@ -103,6 +103,6 @@ filtered = convolve(padded, kernel, width+2, kernel_width)
 write_to_hex(filtered, "hex_filtered.txt")
 print(filtered)
 
-# #write output
-# filtered = np.array(filtered).reshape([width, height])
-# cv2.imwrite("lena_out.bmp", filtered)
+#write output
+filtered = np.array(filtered).reshape([width, height])
+cv2.imwrite("lena_out.bmp", filtered)

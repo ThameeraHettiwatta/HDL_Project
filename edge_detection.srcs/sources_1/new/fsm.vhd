@@ -39,18 +39,22 @@ entity fsm is
            enable_convolve : out STD_LOGIC := '0';                                                --enable signal of convolve module
            enable_padding : out STD_LOGIC := '0';                                                --enable signal of padding module
            convolve_done : in STD_LOGIC;                                                  --signal to indicate that convolution is complete
-           padding_done : in STD_LOGIC );                                                --signal to indicate that padding is complete
-
+           padding_done : in STD_LOGIC;                                                --signal to indicate that padding is complete
+           read_enable_uart : out STD_LOGIC := '0';                                                      --enable reading from uart
+           write_enable_uart : out STD_LOGIC := '0';                                                     --enable writing to uart
+           uart_read_done : in STD_LOGIC;                                                   --indicate reading completion
+           uart_write_done : in STD_LOGIC );                                                  --indicate writing completion
+           
 end fsm;
 
 architecture Behavioral of fsm is
 
-type state is (idle, padding, convolve);
+type state is (idle, padding, convolve, receiver, transmitter);
 signal fsm_state : state;
 
 begin
 
-process (clock, enable_edge_detection, reset, convolve_done, padding_done)
+process (clock, enable_edge_detection, reset, convolve_done, padding_done, uart_read_done, uart_write_done)
     begin
         --reset to initial state
         if (reset = '1') then
@@ -58,17 +62,26 @@ process (clock, enable_edge_detection, reset, convolve_done, padding_done)
             edge_detection_done <= '0';
             enable_convolve <= '0';
             enable_padding <= '0';
-            
+            read_enable_uart <= '0';
+            write_enable_uart <= '0';
 
         elsif rising_edge(clock) then
                 case fsm_state is
                     when idle =>
                         edge_detection_done <= '0';
                         enable_convolve <= '0';
-                        enable_padding <= '0';     
+                        enable_padding <= '0';  
+                        read_enable_uart <= '0';
+                        write_enable_uart <= '0';                           
                         if (enable_edge_detection = '1') then
+                            read_enable_uart <= '1';
+                            fsm_state <= receiver; 
+                        end if;
+                    when receiver =>
+                        if(uart_read_done = '1') then
+                            read_enable_uart <= '0';
                             enable_padding <= '1';
-                            fsm_state <= padding; 
+                            fsm_state <= padding;
                         end if;
                     when padding =>
                         if (padding_done = '1') then
@@ -79,6 +92,12 @@ process (clock, enable_edge_detection, reset, convolve_done, padding_done)
                     when convolve =>
                         if (convolve_done = '1') then
                             enable_convolve <= '0';
+                            write_enable_uart <= '1';
+                            fsm_state <= transmitter;
+                        end if;
+                    when transmitter =>
+                        if (uart_write_done = '1') then
+                            write_enable_uart <= '0';
                             edge_detection_done <= '1';
                             fsm_state <= idle;
                         end if;

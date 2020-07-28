@@ -1,0 +1,4 @@
+vhdl xil_defaultlib  \
+"../../../../edge_detection.srcs/sources_1/ip/output_image/output_image_sim_netlist.vhdl" \
+
+nosort

@@ -33,7 +33,7 @@ use IEEE.NUMERIC_STD.ALL;
 
 entity padding is generic (
      pixel_depth: integer := 8;                                                         --bit depth of an individual pixel
-     input_width : integer := 5;                                                        --width of input image in pixels
+     input_width : integer := 25;                                                        --width of input image in pixels
      address_width : integer := 10);  
  
   Port (   input_img : in STD_LOGIC_VECTOR (pixel_depth-1 downto 0);                    -- data bus for incoming image (input ram)

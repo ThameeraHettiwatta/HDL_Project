@@ -40,20 +40,26 @@ architecture Behavioral of tb_main is
 component main is
   Port ( clock : in STD_LOGIC;
          reset : in STD_LOGIC;
-         enable_edge_detection : in STD_LOGIC;                                         --enable signal of start edge detection process       
-         edge_detection_done : out STD_LOGIC := '0');                                  --signal to indicate the completion of edge detection process
+         rx : in STD_LOGIC;
+         tx : out STD_LOGIC;
+         enable_edge_detection : in STD_LOGIC;                                               
+         edge_detection_done : out STD_LOGIC := '0');                                  
 end component;
 
 signal clock : STD_LOGIC:= '1';
 signal reset :STD_LOGIC;
 signal enable_edge_detection : STD_LOGIC;
 signal edge_detection_done : STD_LOGIC;
+signal rx : STD_LOGIC;
+signal tx : STD_LOGIC;
 
 begin
 
 main1 : main
     port map(clock => clock,
              reset => reset,
+             rx => rx,
+             tx => tx,
              enable_edge_detection => enable_edge_detection,
              edge_detection_done => edge_detection_done);
 
@@ -67,6 +73,8 @@ main1 : main
             reset <= '0';
             wait for 10ns;
             enable_edge_detection <= '1';
+            wait for 10ns;
+            rx <= '1';
             wait for 10ns;
             enable_edge_detection <= '0';
             wait;

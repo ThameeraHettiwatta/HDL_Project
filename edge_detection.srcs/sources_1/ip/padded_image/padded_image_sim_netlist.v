@@ -1,10 +1,10 @@
 // Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2019.2 (win64) Build 2708876 Wed Nov  6 21:40:23 MST 2019
-// Date        : Thu Jul 23 17:22:39 2020
+// Date        : Tue Jul 28 12:29:02 2020
 // Host        : THAMEERA-PC running 64-bit major release  (build 9200)
-// Command     : write_verilog -force -mode funcsim -rename_top padded_image -prefix
-//               padded_image_ padded_image_sim_netlist.v
+// Command     : write_verilog -force -mode funcsim {D:/thameera/ACA
+//               Folder/sem8/hdl/project/HDL_Project/edge_detection.srcs/sources_1/ip/padded_image/padded_image_sim_netlist.v}
 // Design      : padded_image
 // Purpose     : This verilog netlist is a functional simulation representation of the design and should not be modified
 //               or synthesized. This netlist cannot be used for SDF annotated simulation.
@@ -208,6 +208,7 @@ module padded_image
         .web(web));
 endmodule
 
+(* ORIG_REF_NAME = "blk_mem_gen_generic_cstr" *) 
 module padded_image_blk_mem_gen_generic_cstr
    (douta,
     doutb,
@@ -254,6 +255,7 @@ module padded_image_blk_mem_gen_generic_cstr
         .web(web));
 endmodule
 
+(* ORIG_REF_NAME = "blk_mem_gen_prim_width" *) 
 module padded_image_blk_mem_gen_prim_width
    (douta,
     doutb,
@@ -300,6 +302,7 @@ module padded_image_blk_mem_gen_prim_width
         .web(web));
 endmodule
 
+(* ORIG_REF_NAME = "blk_mem_gen_prim_wrapper_init" *) 
 module padded_image_blk_mem_gen_prim_wrapper_init
    (douta,
     doutb,
@@ -479,6 +482,7 @@ module padded_image_blk_mem_gen_prim_wrapper_init
         .WEBWE({1'b0,1'b0,web,web}));
 endmodule
 
+(* ORIG_REF_NAME = "blk_mem_gen_top" *) 
 module padded_image_blk_mem_gen_top
    (douta,
     doutb,
@@ -550,7 +554,7 @@ endmodule
 (* C_WEA_WIDTH = "1" *) (* C_WEB_WIDTH = "1" *) (* C_WRITE_DEPTH_A = "729" *) 
 (* C_WRITE_DEPTH_B = "729" *) (* C_WRITE_MODE_A = "WRITE_FIRST" *) (* C_WRITE_MODE_B = "WRITE_FIRST" *) 
 (* C_WRITE_WIDTH_A = "8" *) (* C_WRITE_WIDTH_B = "8" *) (* C_XDEVICEFAMILY = "artix7" *) 
-(* downgradeipidentifiedwarnings = "yes" *) 
+(* ORIG_REF_NAME = "blk_mem_gen_v8_4_4" *) (* downgradeipidentifiedwarnings = "yes" *) 
 module padded_image_blk_mem_gen_v8_4_4
    (clka,
     rsta,
@@ -758,6 +762,7 @@ module padded_image_blk_mem_gen_v8_4_4
         .web(web));
 endmodule
 
+(* ORIG_REF_NAME = "blk_mem_gen_v8_4_4_synth" *) 
 module padded_image_blk_mem_gen_v8_4_4_synth
    (douta,
     doutb,
