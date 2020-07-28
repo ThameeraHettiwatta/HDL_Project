@@ -130,8 +130,8 @@ begin
     
     constant input_img_size : integer := input_width * input_width;                     --size of input image in pixels
     constant delay : integer := 3;                                                      --delay before transmitting data (3 clock cycles)
-    variable input_pixel_counter : integer := 0;                                        --keep track of number of pixels sent to ram
-    variable output_pixel_counter : integer := 0;                                       --keep track of number of pixels read from ram
+    variable input_pixel_counter : integer := 0;                                        --keep track of number of pixels read from ram
+    variable output_pixel_counter : integer := 0;                                       --keep track of number of pixels sent ram
     variable read_complete : STD_LOGIC := '0';                                          --indicate that all pixels have been read
     variable write_complete : STD_LOGIC := '0';                                          --indicate that all pixels have been written
     variable img_pixel : integer := 0;                                                  --used for storing image pixel value read from ram
@@ -159,12 +159,12 @@ begin
             
         elsif rising_edge(clock) then
         
-            --save incoming image   
+            --save incoming image 
             if (read_en = '1') then
                 reset_rec <= '0';
                 if (read_complete = '0') then                                                                               --reading is not complete
                     if (rx_done = '1') then                                                                                 --a pixel is ready
-                        output_img_address <= std_logic_vector(to_unsigned(output_pixel_counter, address_width));
+                        output_img_address <= std_logic_vector(to_unsigned(output_pixel_counter, address_width));           --set up address to write
                         output_img <= receiver_data_out;
                         output_img_enable <= "1";
                         output_pixel_counter := output_pixel_counter + 1;                                                   --increment pixel counter
@@ -180,11 +180,11 @@ begin
                 end if;
             end if;
             
-            --send output image TODO
+            --send output image 
             if (write_en = '1') then
                 reset_trans <= '1';
                 if (write_complete = '0') then                                                                                   --writing is not complete
-                    if (input_pixel_counter <= input_img_size) then
+                    if (input_pixel_counter <= input_img_size) then                                                              --check if entire image has been read
                         if (tx_done = '1') or (input_pixel_counter = 0) then                                                     --we can only read a new pixel if the previous pixel is done / process hasn't begun
                             --read a pixel from RAM
                             input_img_address <= std_logic_vector(to_unsigned(input_pixel_counter, address_width));

@@ -27,8 +27,8 @@ use IEEE.numeric_std.all;
 
 entity uart_rx is
     generic(
-        data_bits: integer := 8;      --  #  d a t a   b i t s  
-        stop_bit_ticks: integer := 16   --  #  t i c k s   f o r   s t o p   b i t s  
+        data_bits: integer := 8;      --  # data bits  
+        stop_bit_ticks: integer := 16   --  # ticks for stop bits  
     );
     Port ( rx : in STD_LOGIC;
            clk : in STD_LOGIC;
@@ -45,8 +45,8 @@ architecture arch of uart_rx is
     SIGNAL n_reg, n_next: UNSIGNED(2 downto 0);
     SIGNAL b_reg, b_next: STD_LOGIC_VECTOR(7 downto 0);
 begin
---  FSMD  s t a t e   &  d a t a   r e g i s t e r s  
-    process(clk, reset) -- FSMD state and data regs.
+--  FSMD state & data  egisters 
+    process(clk, reset) 
     begin
         if (reset = '1') then
             state_reg <= idle;
@@ -62,7 +62,7 @@ begin
             b_reg <= b_next;
         end if;
     end process;
-   --  n e x t - s t a t e   l o g i c   &  d a t a   p a t h   f u n c t i o n a l   u n i t s / r o u t i n g
+   -- next-state logic 
     process (state_reg, s_reg, n_reg, b_reg, tick, rx)
     begin
         state_next <= state_reg;
@@ -71,13 +71,13 @@ begin
         b_next <= b_reg;
         rx_done <= '0';
         case state_reg is
-        when idle =>
-            if (rx = '0') then
+        when idle =>                                                --idle state, keep checking for
+            if (rx = '0') then                                      --start of commmunication
             state_next <= start;
             s_next <= (others => '0');
             end if;
-        when start =>
-            if (tick = '1') then
+        when start =>                                               --assert whether 7 ticks are received
+            if (tick = '1') then                                    --to indicate start of transmission
                 if (s_reg = 7) then
                     state_next <= data;
                     s_next <= (others => '0');
@@ -86,12 +86,12 @@ begin
                     s_next <= s_reg + 1;
                 end if;
             end if;
-        when data =>
-            if (tick = '1') then
+        when data =>                                                --begin receiving data by reading incoming
+            if (tick = '1') then                                    --bits into shift register
                 if (s_reg = 15) then
                     s_next <= (others => '0');
                     b_next <= rx & b_reg(7 downto 1);
-                    if (n_reg = (data_bits - 1)) then
+                    if (n_reg = (data_bits - 1)) then               --check for the end of data
                         state_next <= stop;
                     else
                         n_next <= n_reg + 1;
@@ -100,8 +100,8 @@ begin
                     s_next <= s_reg + 1;
                 end if;
             end if;
-        when stop =>
-            if (tick = '1') then
+        when stop =>                                                --assert the stop signal and move
+            if (tick = '1') then                                    --to idle state
                 if (s_reg = (stop_bit_ticks - 1)) then
                     state_next <= idle;
                     rx_done <= '1';

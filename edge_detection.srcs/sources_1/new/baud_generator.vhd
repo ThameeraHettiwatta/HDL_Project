@@ -59,7 +59,7 @@ if (reset = '1') THEN
 end if;
 
 if rising_edge(Clock) THEN
-    if (time = to_unsigned(0, 27)) then
+    if (time = to_unsigned(0, 27)) then     --once time limmit is reached, set enable to 1
         enable <= '1';
         time <= to_unsigned(109, 27);
     else

@@ -61,7 +61,7 @@ SIGNAL b_reg, b_next : std_logic_vector (7 DOWNTO 0);
 SIGNAL tx_reg, tx_next : std_logic;
 
 BEGIN
--- FSMD state C? data registers
+
 PROCESS (clk, reset)
 BEGIN
     IF reset = '1' THEN
@@ -78,7 +78,7 @@ BEGIN
         tx_reg <= tx_next;
     END IF;
 END PROCESS;
--- next_state logic & data path functional u n i t s / r o u t i n g
+-- next_state logic 
 PROCESS (state_reg, s_reg, n_reg, b_reg, s_tick, tx_reg, tx_start, din)
 
 BEGIN
@@ -91,7 +91,7 @@ BEGIN
 
     CASE state_reg IS
        
-        WHEN idle =>
+        WHEN idle =>                                            --idle state, no communication takes place
             tx_next <= '1';
             IF tx_start = '1' THEN
                 state_next <= start;
@@ -99,8 +99,8 @@ BEGIN
                 b_next <= din;
             END IF;
         
-        WHEN start =>
-            tx_next <= '0';
+        WHEN start =>                                           --indicate the begining of transmission of data
+            tx_next <= '0';                                     --by sending 16 consecutive ticks
             IF (s_tick = '1') THEN
                 IF s_reg = 15 THEN
                     state_next <= data;
@@ -111,13 +111,13 @@ BEGIN
                 END IF;
             END IF;
         
-        WHEN data =>
-            tx_next <= b_reg (0);
+        WHEN data =>                                            --write each bit of output byte into
+            tx_next <= b_reg (0);                               --tx line
             IF (s_tick = '0') THEN
                 IF s_reg = 15 THEN
                     s_next <= (OTHERS => '0');
                     b_next <= '0' & b_reg (7 DOWNTO 1);
-                    IF n_reg = (DBIT - 1) THEN
+                    IF n_reg = (DBIT - 1) THEN                  --check for the end of data
                         state_next <= stop;
                     ELSE
                         n_next <= n_reg + 1;
@@ -127,8 +127,8 @@ BEGIN
                 END IF;
             END IF;
         
-        WHEN stop =>
-            tx_next <= '1';
+        WHEN stop =>                                            --send ticks to indicate the end of data
+            tx_next <= '1';                                     --and transition to idle state
             IF (s_tick = '1') THEN
                 IF s_reg = (SB_TICK - 1) THEN
                     state_next <= idle;
