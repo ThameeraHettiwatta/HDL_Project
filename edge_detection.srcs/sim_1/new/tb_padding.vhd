@@ -98,7 +98,7 @@ begin
         port map ( input_img_in => input_img,                    
                output_img_out => output_img,                 
                clk => clk,
-               rst_n => reset,
+               rst_n => rst_n,
                enable_in => enable_in,                                      
                enable_out => enable_out,                                  
                input_img_enable_out => input_img_enable,           
