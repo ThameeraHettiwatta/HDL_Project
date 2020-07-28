@@ -83,47 +83,47 @@ component output_image is
 end component;
 
 component padding is generic (
-     pixel_depth: integer := 8;                                                         --bit depth of an individual pixel
-     input_width : integer := 25;                                                        --width of input image in pixels
-     address_width : integer := 10);                                                    --width of memory address (can address upto 2^10 individual pixels)
+     pixel_depth_g: integer := 8;                                                         --bit depth of an individual pixel
+     input_width_g : integer := 25;                                                        --width of input image in pixels
+     address_width_g : integer := 10);                                                    --width of memory address (can address upto 2^10 individual pixels)
       
-    Port ( input_img_in : in STD_LOGIC_VECTOR (pixel_depth-1 downto 0);                    
-           output_img_out : out STD_LOGIC_VECTOR (pixel_depth-1 downto 0);                  
+    Port ( input_img_in : in STD_LOGIC_VECTOR (pixel_depth_g-1 downto 0);                    
+           output_img_out : out STD_LOGIC_VECTOR (pixel_depth_g-1 downto 0);                  
            clk : in STD_LOGIC;
            rst_n : in STD_LOGIC;
            enable_in : in STD_LOGIC;                                      
            enable_out : out STD_LOGIC;                                    
            input_img_enable_out : out STD_LOGIC_VECTOR(0 DOWNTO 0);           
            output_img_enable_out : out STD_LOGIC_VECTOR(0 DOWNTO 0);          
-           input_img_address_out : out STD_LOGIC_VECTOR (address_width-1 downto 0);         
-           output_img_address_out : out STD_LOGIC_VECTOR (address_width-1 downto 0)); 
+           input_img_address_out : out STD_LOGIC_VECTOR (address_width_g-1 downto 0);         
+           output_img_address_out : out STD_LOGIC_VECTOR (address_width_g-1 downto 0)); 
 end component; 
 
 component convolve is generic (
-     pixel_depth: integer := 8;                                                         --bit depth of an individual pixel
-     input_width : integer := 25;                                                        --width of input image in pixels
-     address_width : integer := 10);                                                    --width of memory address (can address upto 2^10 individual pixels)
+     pixel_depth_g: integer := 8;                                                         --bit depth of an individual pixel
+     input_width_g : integer := 25;                                                        --width of input image in pixels
+     address_width_g : integer := 10);                                                    --width of memory address (can address upto 2^10 individual pixels)
                                         
-    Port ( input_img_in : in STD_LOGIC_VECTOR (pixel_depth-1 downto 0);                    
-           output_img_out : out STD_LOGIC_VECTOR (pixel_depth-1 downto 0);                  
+    Port ( input_img_in : in STD_LOGIC_VECTOR (pixel_depth_g-1 downto 0);                    
+           output_img_out : out STD_LOGIC_VECTOR (pixel_depth_g-1 downto 0);                  
            clk : in STD_LOGIC;
            rst_n : in STD_LOGIC;
            enable_in : in STD_LOGIC;                                      
            enable_out : out STD_LOGIC;                                    
            input_img_enable_out : out STD_LOGIC_VECTOR(0 DOWNTO 0);           
            output_img_enable_out : out STD_LOGIC_VECTOR(0 DOWNTO 0);          
-           input_img_address_out : out STD_LOGIC_VECTOR (address_width-1 downto 0);         
-           output_img_address_out : out STD_LOGIC_VECTOR (address_width-1 downto 0));       
+           input_img_address_out : out STD_LOGIC_VECTOR (address_width_g-1 downto 0);         
+           output_img_address_out : out STD_LOGIC_VECTOR (address_width_g-1 downto 0));       
 end component;
 
 component uart is generic (
-     pixel_depth: integer := 8;                                                         --bit depth of an individual pixel
-     input_width : integer := 25;                                                       --width of input image in pixels
+     pixel_depth_g: integer := 8;                                                         --bit depth of an individual pixel
+     input_width_g : integer := 25;                                                       --width of input image in pixels
      baud_rate : integer := 115200;                                                     --baud rate for comms 
-     address_width : integer := 10);                                                    --width of memory address (can address upto 2^10 individual pixels)
+     address_width_g : integer := 10);                                                    --width of memory address (can address upto 2^10 individual pixels)
 
-    Port ( input_img_in : in STD_LOGIC_VECTOR (pixel_depth-1 downto 0);                  
-           output_img_out : out STD_LOGIC_VECTOR (pixel_depth-1 downto 0);                 
+    Port ( input_img_in : in STD_LOGIC_VECTOR (pixel_depth_g-1 downto 0);                  
+           output_img_out : out STD_LOGIC_VECTOR (pixel_depth_g-1 downto 0);                 
            clk : in STD_LOGIC;
            rst_n : in STD_LOGIC;
            read_en_in : in STD_LOGIC;                                                   
@@ -134,8 +134,8 @@ component uart is generic (
            tx_out : out STD_LOGIC;                                                         
            input_img_enable_out : out STD_LOGIC_VECTOR(0 DOWNTO 0);                         
            output_img_enable_out : out STD_LOGIC_VECTOR(0 DOWNTO 0);                        
-           input_img_address_out : out STD_LOGIC_VECTOR (address_width-1 downto 0);         
-           output_img_address_out : out STD_LOGIC_VECTOR (address_width-1 downto 0));       
+           input_img_address_out : out STD_LOGIC_VECTOR (address_width_g-1 downto 0);         
+           output_img_address_out : out STD_LOGIC_VECTOR (address_width_g-1 downto 0));       
 end component;          
 
 component fsm is
@@ -171,10 +171,10 @@ signal input_img_address_out_convolve : STD_LOGIC_VECTOR (9 downto 0);
 signal output_img_address_out_convolve : STD_LOGIC_VECTOR (9 downto 0);  
 signal input_img_uart : STD_LOGIC_VECTOR (7 downto 0);                 
 signal output_img_uart : STD_LOGIC_VECTOR (7 downto 0);                  
-signal read_en_in : STD_LOGIC;                                                      
-signal write_en_in : STD_LOGIC;                                                   
-signal read_done_out : STD_LOGIC;                                                   
-signal write_done_out : STD_LOGIC;                                                  
+signal read_en : STD_LOGIC;                                                      
+signal write_en : STD_LOGIC;                                                   
+signal read_done : STD_LOGIC;                                                   
+signal write_done : STD_LOGIC;                                                  
 signal input_img_enable_out_uart : STD_LOGIC_VECTOR(0 DOWNTO 0);                        
 signal output_img_enable_out_uart : STD_LOGIC_VECTOR(0 DOWNTO 0);                        
 signal input_img_address_out_uart : STD_LOGIC_VECTOR (9 downto 0);         
@@ -247,10 +247,10 @@ begin
                    enable_padding_out => enable_in_padding,
                    convolve_done_in => enable_out_convolve,
                    padding_done_in => enable_out_padding,
-                   read_enable_uart_out => read_en_in,
-                   write_enable_uart_out => write_en_in,
-                   uart_read_done_in => read_done_out,
-                   uart_write_done_in => write_done_out);
+                   read_enable_uart_out => read_en,
+                   write_enable_uart_out => write_en,
+                   uart_read_done_in => read_done,
+                   uart_write_done_in => write_done);
                    
     uart1 : uart
         port map ( input_img_in => input_img_uart,
@@ -259,10 +259,10 @@ begin
                    rst_n => rst_n,
                    rx_in => rx_in,
                    tx_out => tx_out,
-                   read_en_in => read_en_in,
-                   write_en_in => write_en_in,
-                   read_done_out => read_done_out,
-                   write_done_out => write_done_out,
+                   read_en_in => read_en,
+                   write_en_in => write_en,
+                   read_done_out => read_done,
+                   write_done_out => write_done,
                    input_img_enable_out => input_img_enable_out_uart,
                    output_img_enable_out => output_img_enable_out_uart,
                    input_img_address_out => input_img_address_out_uart,

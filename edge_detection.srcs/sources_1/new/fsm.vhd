@@ -54,10 +54,10 @@ signal fsm_state : state;
 
 begin
 
-process (clk, enable_edge_detection_in, rst_n, convolve_done_in, padding_done_in, uart_read_done_in, uart_write_done_in)
+state_machine : process (clk, enable_edge_detection_in, rst_n, convolve_done_in, padding_done_in, uart_read_done_in, uart_write_done_in)
     begin
         --rst_n to initial state
-        if (rst_n = '1') then
+        if (rst_n = '0') then
             fsm_state <= idle;
             edge_detection_done_out <= '0';
             enable_convolve_out <= '0';
@@ -105,5 +105,5 @@ process (clk, enable_edge_detection_in, rst_n, convolve_done_in, padding_done_in
                         fsm_state <= idle;                        
                 end case;
         end if;
-    end process;
+    end process state_machine;
 end Behavioral;

@@ -50,10 +50,10 @@ signal time : unsigned (26 downto 0);       --used to store the necessary time i
 
 begin
 
-PROCESS(clk, rst_n)
+baud : PROCESS(clk, rst_n)
 BEGIN
 
-if (rst_n = '1') THEN
+if (rst_n = '0') THEN
     time <= to_unsigned(109, 27);
     enable <= '0';
 end if;
@@ -68,5 +68,5 @@ if rising_edge(clk) THEN
     end if;
 end if;
 
-end process;
+end process baud;
 end Behavioral;

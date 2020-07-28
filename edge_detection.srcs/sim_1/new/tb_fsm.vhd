@@ -35,25 +35,25 @@ entity tb_fsm is
 --  Port ( );
 end tb_fsm;
 
-architecture Behavioral of tb_fsm is
+architecture Behavioral of tb_fsm is    
 
 component fsm is
-  Port (   clock : in STD_LOGIC;
-           reset : in STD_LOGIC;
-           enable_edge_detection : in STD_LOGIC;                                                
-           edge_detection_done : out STD_LOGIC;                                          
-           enable_convolve : out STD_LOGIC;                                              
-           enable_padding : out STD_LOGIC;                                               
-           convolve_done : in STD_LOGIC;                                                  
-           padding_done : in STD_LOGIC;                                                
-           read_enable_uart : out STD_LOGIC := '0';                                                    
-           write_enable_uart : out STD_LOGIC := '0';                                                     
-           uart_read_done : in STD_LOGIC;                                                  
-           uart_write_done : in STD_LOGIC );                                                 
+  Port (   clk : in STD_LOGIC;
+           rst_n : in STD_LOGIC;
+           enable_edge_detection_in : in STD_LOGIC;                                                
+           edge_detection_done_out : out STD_LOGIC;                                          
+           enable_convolve_out : out STD_LOGIC;                                              
+           enable_padding_out : out STD_LOGIC;                                               
+           convolve_done_in : in STD_LOGIC;                                                  
+           padding_done_in : in STD_LOGIC;                                                
+           read_enable_uart_out : out STD_LOGIC := '0';                                                    
+           write_enable_uart_out : out STD_LOGIC := '0';                                                     
+           uart_read_done_in : in STD_LOGIC;                                                  
+           uart_write_done_in : in STD_LOGIC );                                                 
 end component;
 
-signal clock : STD_LOGIC := '0';
-signal reset : STD_LOGIC;
+signal clk : STD_LOGIC := '0';
+signal rst_n : STD_LOGIC;
 signal enable_edge_detection : STD_LOGIC;
 signal edge_detection_done : STD_LOGIC;
 signal enable_convolve : STD_LOGIC;
@@ -68,31 +68,31 @@ signal uart_write_done : STD_LOGIC;
 begin
 
     fsm1 : fsm
-        port map ( clock => clock,
-                   reset => reset,
-                   enable_edge_detection => enable_edge_detection,
-                   edge_detection_done => edge_detection_done,
-                   enable_convolve => enable_convolve,
-                   enable_padding => enable_padding,
-                   convolve_done => convolve_done,
-                   padding_done => padding_done, 
-                   read_enable_uart => read_enable_uart,
-                   write_enable_uart => write_enable_uart,
-                   uart_read_done => uart_read_done,
-                   uart_write_done => uart_write_done);
+        port map ( clk => clk,
+                   rst_n => rst_n,
+                   enable_edge_detection_in => enable_edge_detection,
+                   edge_detection_done_out => edge_detection_done,
+                   enable_convolve_out => enable_convolve,
+                   enable_padding_out => enable_padding,
+                   convolve_done_in => convolve_done,
+                   padding_done_in => padding_done, 
+                   read_enable_uart_out => read_enable_uart,
+                   write_enable_uart_out => write_enable_uart,
+                   uart_read_done_in => uart_read_done,
+                   uart_write_done_in => uart_write_done);
     
-    clock <= not clock after 5ns;
+    clk <= not clk after 5ns;
 
     stimuli : process 
         begin
-            reset <= '1';
+            rst_n <= '0';
             padding_done <= '0';
             convolve_done <= '0';
             uart_read_done <= '0';
             uart_write_done <= '0';
             enable_edge_detection <= '0';
             wait for 5ns;
-            reset <= '0';
+            rst_n <= '1';
             wait for 10ns;
             enable_edge_detection <= '1';
             wait for 30ns;

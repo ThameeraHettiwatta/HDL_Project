@@ -32,20 +32,20 @@ use IEEE.NUMERIC_STD.ALL;
 --use UNISIM.VComponents.all;
 
 entity padding is generic (
-     pixel_depth: integer := 8;                                                         --bit depth of an individual pixel
-     input_width : integer := 25;                                                        --width of input image in pixels
-     address_width : integer := 10);  
+     pixel_depth_g: integer := 8;                                                         --bit depth of an individual pixel
+     input_width_g : integer := 25;                                                        --width of input image in pixels
+     address_width_g : integer := 10);  
  
-  Port (   input_img_in : in STD_LOGIC_VECTOR (pixel_depth-1 downto 0);                    -- data bus for incoming image (input ram)
-           output_img_out : out STD_LOGIC_VECTOR (pixel_depth-1 downto 0);                  -- data bus for output image after convolution (output ram)
+  Port (   input_img_in : in STD_LOGIC_VECTOR (pixel_depth_g-1 downto 0);                    -- data bus for incoming image (input ram)
+           output_img_out : out STD_LOGIC_VECTOR (pixel_depth_g-1 downto 0);                  -- data bus for output image after convolution (output ram)
            clk : in STD_LOGIC;
            rst_n : in STD_LOGIC;
            enable_in : in STD_LOGIC;                                                    --enable convolve module
            enable_out : out STD_LOGIC;                                                  --enable the output of the module (indicate that convolution is complete)
            input_img_enable_out : out STD_LOGIC_VECTOR(0 DOWNTO 0);                         --enable writing values to input ram
            output_img_enable_out : out STD_LOGIC_VECTOR(0 DOWNTO 0);                        --enable writing values to output ram
-           input_img_address_out : out STD_LOGIC_VECTOR (address_width-1 downto 0);         --address for reading values from input ram
-           output_img_address_out : out STD_LOGIC_VECTOR (address_width-1 downto 0));       --address for writing values to output ram
+           input_img_address_out : out STD_LOGIC_VECTOR (address_width_g-1 downto 0);         --address for reading values from input ram
+           output_img_address_out : out STD_LOGIC_VECTOR (address_width_g-1 downto 0));       --address for writing values to output ram
            
 end padding;
 
@@ -53,11 +53,11 @@ architecture Behavioral of padding is
 
 begin
 
-process (clk, input_img_in, rst_n, enable_in)
+pad_image : process (clk, input_img_in, rst_n, enable_in)
 
     --define constants and variables used for padding process
-    constant input_img_size : integer := input_width * input_width;                     --size of input image in pixels
-    constant output_width : integer := input_width +2;                                  --width of output image in pixels
+    constant input_img_size : integer := input_width_g * input_width_g;                     --size of input image in pixels
+    constant output_width : integer := input_width_g +2;                                  --width of output image in pixels
     constant output_img_size : integer := output_width * output_width;                  --size of output image in pixels
     variable output_pixel_counter : integer := 0;                                       --used for stepping through each pixel in output image (0 -> output_img_size)
     variable pad_x_index : integer := 0;                                                --horizontal index of output image pixel
@@ -70,7 +70,7 @@ process (clk, input_img_in, rst_n, enable_in)
     begin
     
     --rst_n to initial state
-        if (rst_n = '1') then
+        if (rst_n = '0') then
             output_pixel_counter := 0;
             read_delay := 0;
             write_delay := 0;
@@ -113,7 +113,7 @@ process (clk, input_img_in, rst_n, enable_in)
                  
                  if (write_delay = 0) then 
                      read_delay := 4;       
-                     input_img_address_out <= std_logic_vector(to_unsigned((input_width*img_y_index) + img_x_index, address_width));
+                     input_img_address_out <= std_logic_vector(to_unsigned((input_width_g*img_y_index) + img_x_index, address_width_g));
                      -- input_img_enable_out <= "0"; no need to disable since its never enabled 
                  end if;
                   
@@ -121,7 +121,7 @@ process (clk, input_img_in, rst_n, enable_in)
                      
                  if (read_delay = 0) then
                      write_delay := 4;   
-                     output_img_address_out <= std_logic_vector(to_unsigned(output_pixel_counter, address_width));                 
+                     output_img_address_out <= std_logic_vector(to_unsigned(output_pixel_counter, address_width_g));                 
                      output_img_out <= input_img_in;
                      output_img_enable_out <= "1";
                      output_pixel_counter := output_pixel_counter + 1;
@@ -133,5 +133,5 @@ process (clk, input_img_in, rst_n, enable_in)
                  
              end if;
         end if;
-    end process;
+    end process pad_image;
 end Behavioral;

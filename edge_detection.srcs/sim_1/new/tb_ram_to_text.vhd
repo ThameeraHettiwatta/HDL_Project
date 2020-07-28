@@ -50,8 +50,8 @@ end component;
 
 --    Port ( input_img : in STD_LOGIC_VECTOR (7 downto 0);                    
 --           output_img : out STD_LOGIC_VECTOR (7 downto 0);                  
---           clock : in STD_LOGIC;
---           reset : in STD_LOGIC;
+--           clk : in STD_LOGIC;
+--           rst_n : in STD_LOGIC;
 --           enable_in : in STD_LOGIC;                                      
 --           enable_out : out STD_LOGIC;                                    
 --           input_img_enable : out STD_LOGIC_VECTOR(0 DOWNTO 0);           
@@ -76,16 +76,16 @@ end component;
 
 component convolve is                                        
 
-    Port ( input_img : in STD_LOGIC_VECTOR (7 downto 0);                    
-           output_img : out STD_LOGIC_VECTOR (7 downto 0);                  
-           clock : in STD_LOGIC;
-           reset : in STD_LOGIC;
+    Port ( input_img_in : in STD_LOGIC_VECTOR (7 downto 0);                    
+           output_img_out : out STD_LOGIC_VECTOR (7 downto 0);                  
+           clk : in STD_LOGIC;
+           rst_n : in STD_LOGIC;
            enable_in : in STD_LOGIC;                                      
            enable_out : out STD_LOGIC;                                    
-           input_img_enable : out STD_LOGIC_VECTOR(0 DOWNTO 0);           
-           output_img_enable : out STD_LOGIC_VECTOR(0 DOWNTO 0);          
-           input_img_address : out STD_LOGIC_VECTOR (9 downto 0);         
-           output_img_address : out STD_LOGIC_VECTOR (9 downto 0));       
+           input_img_enable_out : out STD_LOGIC_VECTOR(0 DOWNTO 0);           
+           output_img_enable_out : out STD_LOGIC_VECTOR(0 DOWNTO 0);          
+           input_img_address_out : out STD_LOGIC_VECTOR (9 downto 0);         
+           output_img_address_out : out STD_LOGIC_VECTOR (9 downto 0));       
            
 end component;
 
@@ -107,8 +107,8 @@ end component;
 --define signals
 signal input_img : STD_LOGIC_VECTOR (7 downto 0);                    
 signal output_img : STD_LOGIC_VECTOR (7 downto 0);                  
-signal clock : STD_LOGIC := '1';
-signal reset : STD_LOGIC;
+signal clk : STD_LOGIC := '1';
+signal rst_n : STD_LOGIC;
 signal enable_in : STD_LOGIC;                                      
 signal enable_out : STD_LOGIC;                                    
 signal input_img_enable : STD_LOGIC_VECTOR(0 DOWNTO 0);           
@@ -125,8 +125,8 @@ begin
 --    pad1 : padding
 --        port map ( input_img => input_img,                    
 --               output_img => output_img,                 
---               clock => clock,
---               reset => reset,
+--               clk => clk,
+--               rst_n => rst_n,
 --               enable_in => enable_in,                                      
 --               enable_out => enable_out,                                  
 --               input_img_enable => input_img_enable,           
@@ -135,36 +135,36 @@ begin
 --               output_img_address => output_img_address); 
     
 --    input_ram : input_image
---        port map ( clka => clock,                    
+--        port map ( clka => clk,                    
 --               wea => "0",                 
 --               addra => input_img_address,
 --               dina => "00000000",
 --               douta => input_img,                                      
---               clkb => clock,                                  
+--               clkb => clk,                                  
 --               web => "0",           
 --               addrb => "0000000000",     
 --               dinb => "00000000",    
 --               doutb => doutb); 
 
     conv1 : convolve
-        port map ( input_img => input_img,                    
-               output_img => output_img,                 
-               clock => clock,
-               reset => reset,
+        port map ( input_img_in => input_img,                    
+               output_img_out => output_img,                 
+               clk => clk,
+               rst_n => rst_n,
                enable_in => enable_in,                                      
                enable_out => enable_out,                                  
-               input_img_enable => input_img_enable,           
-               output_img_enable => output_img_enable,     
-               input_img_address => input_img_address,    
-               output_img_address => output_img_address); 
+               input_img_enable_out => input_img_enable,           
+               output_img_enable_out => output_img_enable,     
+               input_img_address_out => input_img_address,    
+               output_img_address_out => output_img_address); 
     
     input_ram : padded_image
-        port map ( clka => clock,                    
+        port map ( clka => clk,                    
                wea => "0",                 
                addra => input_img_address,
                dina => "00000000",
                douta => input_img,                                      
-               clkb => clock,                                  
+               clkb => clk,                                  
                web => "0",           
                addrb => "0000000000",     
                dinb => "00000000",    
@@ -175,25 +175,25 @@ begin
           write_enable => output_img_enable,
           data_out => data_out);
           
-    clock <= not clock after 5ns;
+    clk <= not clk after 5ns;
 
     stimuli : process 
         begin
-            reset <= '1';
+            rst_n <= '0';
             enable_in <= '0';
             wait for 20ns;
             
-            reset <= '0';
+            rst_n <= '1';
             enable_in <= '1';
             wait;
             
         end process;
   
---    convert_to_text : process (clock)
+--    convert_to_text : process (clk)
 --        variable out_value : line;
 --        file padded_ram : text is out "padded_ram.txt";
 --        begin
---            if ( clock 'event and clock = '1' ) then
+--            if ( clk 'event and clk = '1' ) then
 --                if ( output_img_enable = "1" ) then
 --                    write(out_value, to_integer(unsigned(output_img_address)), left, 3);
 --                    write(out_value, string'(","));
@@ -206,11 +206,11 @@ begin
 --            end if;
 --        end process;  
 
-    convert_to_text : process (clock)
+    convert_to_text : process (clk)
         variable out_value : line;
         file convoluted_ram : text is out "convoluted_ram.txt";
         begin
-            if ( clock 'event and clock = '1' ) then
+            if ( clk 'event and clk = '1' ) then
                 if ( output_img_enable = "1" ) then
                     write(out_value, to_integer(unsigned(output_img_address)), left, 3);
                     write(out_value, string'(","));
