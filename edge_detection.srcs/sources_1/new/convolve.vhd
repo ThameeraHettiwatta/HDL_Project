@@ -36,16 +36,16 @@ entity convolve is generic (
      input_width : integer := 25;                                                        --width of input image in pixels
      address_width : integer := 10);                                                    --width of memory address (can address upto 2^10 individual pixels)
 
-    Port ( input_img : in STD_LOGIC_VECTOR (pixel_depth-1 downto 0);                    -- data bus for incoming image (input ram)
-           output_img : out STD_LOGIC_VECTOR (pixel_depth-1 downto 0);                  -- data bus for output image after convolution (output ram)
-           clock : in STD_LOGIC;
-           reset : in STD_LOGIC;
+    Port ( input_img_in : in STD_LOGIC_VECTOR (pixel_depth-1 downto 0);                    -- data bus for incoming image (input ram)
+           output_img_out : out STD_LOGIC_VECTOR (pixel_depth-1 downto 0);                  -- data bus for output image after convolution (output ram)
+           clk : in STD_LOGIC;
+           rst_n : in STD_LOGIC;
            enable_in : in STD_LOGIC;                                                    --enable convolve module
            enable_out : out STD_LOGIC;                                                  --enable the output of the module (indicate that convolution is complete)
-           input_img_enable : out STD_LOGIC_VECTOR(0 DOWNTO 0);                         --enable writing values to input ram
-           output_img_enable : out STD_LOGIC_VECTOR(0 DOWNTO 0);                        --enable writing values to output ram
-           input_img_address : out STD_LOGIC_VECTOR (address_width-1 downto 0);         --address for reading values from input ram
-           output_img_address : out STD_LOGIC_VECTOR (address_width-1 downto 0));       --address for writing values to output ram
+           input_img_enable_out : out STD_LOGIC_VECTOR(0 DOWNTO 0);                         --enable writing values to input ram
+           output_img_enable_out : out STD_LOGIC_VECTOR(0 DOWNTO 0);                        --enable writing values to output ram
+           input_img_address_out : out STD_LOGIC_VECTOR (address_width-1 downto 0);         --address for reading values from input ram
+           output_img_address_out : out STD_LOGIC_VECTOR (address_width-1 downto 0));       --address for writing values to output ram
            
 end convolve;
 
@@ -53,7 +53,7 @@ architecture Behavioral of convolve is
 
 begin
 
-process (clock, input_img, reset, enable_in)
+process (clk, input_img_in, rst_n, enable_in)
 
     --note : kernel used for convolution: [[-1, -1, -1] , [-1, 8, -1] , [-1, -1, -1]]
     --note : image normalization not performed since sum of kernel  values = 0
@@ -79,18 +79,18 @@ process (clock, input_img, reset, enable_in)
     variable img_y_index : integer := 0;                                                --vertical index of output image pixel
     begin
 
-        --reset to initial state
-        if (reset = '1') then
+        --rst_n to initial state
+        if (rst_n = '1') then
             output_pixel_counter := 0;
             kernel_pixel_counter := 0;
             enable_out <= '0';
-            input_img_enable <= "0";
-            output_img_enable <= "0";
+            input_img_enable_out <= "0";
+            output_img_enable_out <= "0";
             conv_sum := 0;
-            input_img_address <= "0000000000";
-            output_img_address <= "0000000000";
+            input_img_address_out <= "0000000000";
+            output_img_address_out <= "0000000000";
                     
-        elsif rising_edge(clock) then
+        elsif rising_edge(clk) then
             if enable_in = '1' then
                 
                 --read a value from the image
@@ -98,13 +98,13 @@ process (clock, input_img, reset, enable_in)
                 kernel_y_index := kernel_pixel_counter / kernel_width;
                 img_x_index := output_pixel_counter mod output_width;
                 img_y_index := output_pixel_counter / output_width;
-                input_img_address <= std_logic_vector(to_unsigned(((img_y_index + kernel_y_index) * input_width) + (img_x_index +kernel_x_index), address_width));
-                -- input_img_enable <= "0"; no need to disable since its never enabled
-                img_pixel := to_integer(unsigned(input_img));
+                input_img_address_out <= std_logic_vector(to_unsigned(((img_y_index + kernel_y_index) * input_width) + (img_x_index +kernel_x_index), address_width));
+                -- input_img_enable_out <= "0"; no need to disable since its never enabled
+                img_pixel := to_integer(unsigned(input_img_in));
                 
                 --read a value from the kernel, multiply and add to the sum
                 if (kernel_pixel_counter = 3) then                                                          --restart calculations from zero
-                    output_img_enable <= "0";                                                               --turn off data writing
+                    output_img_enable_out <= "0";                                                               --turn off data writing
                     conv_sum := (img_pixel * conv_kernel((kernel_pixel_counter-3)mod kernel_size));         --start sum from zero
                 else
                     conv_sum := conv_sum + (img_pixel * conv_kernel((kernel_pixel_counter-3)mod kernel_size));
@@ -121,9 +121,9 @@ process (clock, input_img, reset, enable_in)
                      
                     --ignore the first iteration, otherwise write output
                     if (output_pixel_counter /= 0) then
-                        output_img_address <= std_logic_vector(to_unsigned(output_pixel_counter-1, address_width));
-                        output_img <= std_logic_vector(to_unsigned(conv_sum, pixel_depth));
-                        output_img_enable <= "1";
+                        output_img_address_out <= std_logic_vector(to_unsigned(output_pixel_counter-1, address_width));
+                        output_img_out <= std_logic_vector(to_unsigned(conv_sum, pixel_depth));
+                        output_img_enable_out <= "1";
                     end if;
                           
                     --if all pixels have been processed, finish output
@@ -135,7 +135,7 @@ process (clock, input_img, reset, enable_in)
                kernel_pixel_counter := kernel_pixel_counter + 1;                                            --increment kernel counter
                 
                 if (kernel_pixel_counter = kernel_size) then                                               
-                    kernel_pixel_counter := 0;                                                              --reset kernel_counter
+                    kernel_pixel_counter := 0;                                                              --rst_n kernel_counter
                     output_pixel_counter := output_pixel_counter + 1;                                       --increment output pixel counter
                 end if;
 

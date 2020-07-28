@@ -2,41 +2,25 @@
 # Vivado v2019.2 (64-bit)
 # SW Build 2708876 on Wed Nov  6 21:40:23 MST 2019
 # IP Build 2700528 on Thu Nov  7 00:09:20 MST 2019
-# Start of session at: Mon Jul 27 21:12:07 2020
-# Process ID: 9696
+# Start of session at: Tue Jul 28 21:23:06 2020
+# Process ID: 16908
 # Current directory: D:/thameera/ACA Folder/sem8/hdl/project/HDL_Project
-# Command line: vivado.exe -gui_launcher_event rodinguilauncherevent11132 D:\thameera\ACA Folder\sem8\hdl\project\HDL_Project\edge_detection.xpr
+# Command line: vivado.exe -gui_launcher_event rodinguilauncherevent16252 D:\thameera\ACA Folder\sem8\hdl\project\HDL_Project\edge_detection.xpr
 # Log file: D:/thameera/ACA Folder/sem8/hdl/project/HDL_Project/vivado.log
 # Journal file: D:/thameera/ACA Folder/sem8/hdl/project/HDL_Project\vivado.jou
 #-----------------------------------------------------------
 start_gui
 open_project {D:/thameera/ACA Folder/sem8/hdl/project/HDL_Project/edge_detection.xpr}
 update_compile_order -fileset sources_1
-add_files -norecurse {{D:/thameera/ACA Folder/sem8/hdl/project/HDL_Project/edge_detection.srcs/sources_1/new/UART_comms.vhd} {D:/thameera/ACA Folder/sem8/hdl/project/HDL_Project/edge_detection.srcs/sources_1/new/baud_generator.vhd} {D:/thameera/ACA Folder/sem8/hdl/project/HDL_Project/edge_detection.srcs/sources_1/new/UART.vhd} {D:/thameera/ACA Folder/sem8/hdl/project/HDL_Project/edge_detection.srcs/sources_1/new/uart_tx.vhd}}
-update_compile_order -fileset sources_1
-create_ip -name blk_mem_gen -vendor xilinx.com -library ip -version 8.4 -module_name output_image -dir {d:/thameera/ACA Folder/sem8/hdl/project/HDL_Project/edge_detection.srcs/sources_1/ip}
-set_property -dict [list CONFIG.Component_Name {output_image} CONFIG.Memory_Type {True_Dual_Port_RAM} CONFIG.Use_Byte_Write_Enable {true} CONFIG.Byte_Size {8} CONFIG.Write_Width_A {8} CONFIG.Write_Depth_A {625} CONFIG.Read_Width_A {8} CONFIG.Enable_A {Always_Enabled} CONFIG.Write_Width_B {8} CONFIG.Read_Width_B {8} CONFIG.Enable_B {Always_Enabled} CONFIG.Register_PortB_Output_of_Memory_Primitives {true} CONFIG.Port_B_Clock {100} CONFIG.Port_B_Write_Rate {50} CONFIG.Port_B_Enable_Rate {100}] [get_ips output_image]
-generate_target {instantiation_template} [get_files {{d:/thameera/ACA Folder/sem8/hdl/project/HDL_Project/edge_detection.srcs/sources_1/ip/output_image/output_image.xci}}]
-update_compile_order -fileset sources_1
-generate_target all [get_files  {{d:/thameera/ACA Folder/sem8/hdl/project/HDL_Project/edge_detection.srcs/sources_1/ip/output_image/output_image.xci}}]
-catch { config_ip_cache -export [get_ips -all output_image] }
-export_ip_user_files -of_objects [get_files {{d:/thameera/ACA Folder/sem8/hdl/project/HDL_Project/edge_detection.srcs/sources_1/ip/output_image/output_image.xci}}] -no_script -sync -force -quiet
-create_ip_run [get_files -of_objects [get_fileset sources_1] {{d:/thameera/ACA Folder/sem8/hdl/project/HDL_Project/edge_detection.srcs/sources_1/ip/output_image/output_image.xci}}]
-launch_runs -jobs 4 output_image_synth_1
-wait_on_run output_image_synth_1
-export_simulation -of_objects [get_files {{d:/thameera/ACA Folder/sem8/hdl/project/HDL_Project/edge_detection.srcs/sources_1/ip/output_image/output_image.xci}}] -directory {D:/thameera/ACA Folder/sem8/hdl/project/HDL_Project/edge_detection.ip_user_files/sim_scripts} -ip_user_files_dir {D:/thameera/ACA Folder/sem8/hdl/project/HDL_Project/edge_detection.ip_user_files} -ipstatic_source_dir {D:/thameera/ACA Folder/sem8/hdl/project/HDL_Project/edge_detection.ip_user_files/ipstatic} -lib_map_path [list {modelsim=D:/thameera/ACA Folder/sem8/hdl/project/HDL_Project/edge_detection.cache/compile_simlib/modelsim} {questa=D:/thameera/ACA Folder/sem8/hdl/project/HDL_Project/edge_detection.cache/compile_simlib/questa} {riviera=D:/thameera/ACA Folder/sem8/hdl/project/HDL_Project/edge_detection.cache/compile_simlib/riviera} {activehdl=D:/thameera/ACA Folder/sem8/hdl/project/HDL_Project/edge_detection.cache/compile_simlib/activehdl}] -use_ip_compiled_libs -force -quiet
 open_project {D:/thameera/ACA Folder/sem8/hdl/hdl_project_my_repo/Image_FIlter/Image_FIlter.xpr}
 update_compile_order -fileset sources_1
 current_project edge_detection
-update_compile_order -fileset sources_1
-update_compile_order -fileset sources_1
-# Disabling source management mode.  This is to allow the top design properties to be set without GUI intervention.
-set_property source_mgmt_mode None [current_project]
-set_property top tb_fsm [get_filesets sim_1]
-set_property top_lib xil_defaultlib [get_filesets sim_1]
-# Re-enabling previously disabled source management mode.
-set_property source_mgmt_mode All [current_project]
-update_compile_order -fileset sim_1
-launch_simulation
-source tb_fsm.tcl
-close_sim
+current_project Image_FIlter
+current_project edge_detection
+synth_design -rtl -name rtl_1
+synth_design -rtl -name rtl_1
+synth_design -rtl -name rtl_1
+synth_design -rtl -name rtl_1
+synth_design -rtl -name rtl_1
+close_design
+close_project

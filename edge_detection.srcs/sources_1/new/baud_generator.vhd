@@ -33,16 +33,16 @@ use ieee.numeric_std.all;
 --use UNISIM.VComponents.all;
 
 entity baud_generator is
-    Port ( Clock : in STD_LOGIC;
+    Port ( clk : in STD_LOGIC;
            enable : out STD_LOGIC;
-           reset : in STD_LOGIC);
+           rst_n : in STD_LOGIC);
 end baud_generator;
 
 architecture Behavioral of baud_generator is
 
---simple clock divider used to generate ticks at baud rate
---basys3 clock = 100mhz
---clock counter = 100 * 10^6 (2^27)
+--simple clk divider used to generate ticks at baud rate
+--basys3 clk = 100mhz
+--clk counter = 100 * 10^6 (2^27)
 --921600 samples/sec = 921,600 Hz
 --divider = 100,000,000/921,600 = 108.51.
 
@@ -50,15 +50,15 @@ signal time : unsigned (26 downto 0);       --used to store the necessary time i
 
 begin
 
-PROCESS(Clock, reset)
+PROCESS(clk, rst_n)
 BEGIN
 
-if (reset = '1') THEN
+if (rst_n = '1') THEN
     time <= to_unsigned(109, 27);
     enable <= '0';
 end if;
 
-if rising_edge(Clock) THEN
+if rising_edge(clk) THEN
     if (time = to_unsigned(0, 27)) then     --once time limmit is reached, set enable to 1
         enable <= '1';
         time <= to_unsigned(109, 27);

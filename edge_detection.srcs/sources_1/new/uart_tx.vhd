@@ -41,7 +41,7 @@ entity uart_tx is
        );
     port (
         clk: in std_logic;
-        reset: in std_logic;
+        rst_n: in std_logic;
         tx_start : in std_logic;
         s_tick: in std_logic ;
         din: in std_logic_vector (7 downto 0) ;
@@ -62,9 +62,9 @@ SIGNAL tx_reg, tx_next : std_logic;
 
 BEGIN
 
-PROCESS (clk, reset)
+PROCESS (clk, rst_n)
 BEGIN
-    IF reset = '1' THEN
+    IF rst_n = '1' THEN
         state_reg <= idle;
         s_reg <= (OTHERS => '0');
         n_reg <= (OTHERS => '0');

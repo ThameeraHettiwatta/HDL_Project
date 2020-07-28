@@ -32,7 +32,7 @@ entity uart_rx is
     );
     Port ( rx : in STD_LOGIC;
            clk : in STD_LOGIC;
-           reset: in STD_LOGIC;
+           rst_n: in STD_LOGIC;
            tick : in STD_LOGIC;
            rx_done : out STD_LOGIC;
            data_out : out STD_LOGIC_VECTOR (7 downto 0));
@@ -46,9 +46,9 @@ architecture arch of uart_rx is
     SIGNAL b_reg, b_next: STD_LOGIC_VECTOR(7 downto 0);
 begin
 --  FSMD state & data  egisters 
-    process(clk, reset) 
+    process(clk, rst_n) 
     begin
-        if (reset = '1') then
+        if (rst_n = '1') then
             state_reg <= idle;
             s_reg <= (others => '0');
             n_reg <= (others => '0');

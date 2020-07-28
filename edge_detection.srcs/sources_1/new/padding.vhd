@@ -36,16 +36,16 @@ entity padding is generic (
      input_width : integer := 25;                                                        --width of input image in pixels
      address_width : integer := 10);  
  
-  Port (   input_img : in STD_LOGIC_VECTOR (pixel_depth-1 downto 0);                    -- data bus for incoming image (input ram)
-           output_img : out STD_LOGIC_VECTOR (pixel_depth-1 downto 0);                  -- data bus for output image after convolution (output ram)
-           clock : in STD_LOGIC;
-           reset : in STD_LOGIC;
+  Port (   input_img_in : in STD_LOGIC_VECTOR (pixel_depth-1 downto 0);                    -- data bus for incoming image (input ram)
+           output_img_out : out STD_LOGIC_VECTOR (pixel_depth-1 downto 0);                  -- data bus for output image after convolution (output ram)
+           clk : in STD_LOGIC;
+           rst_n : in STD_LOGIC;
            enable_in : in STD_LOGIC;                                                    --enable convolve module
            enable_out : out STD_LOGIC;                                                  --enable the output of the module (indicate that convolution is complete)
-           input_img_enable : out STD_LOGIC_VECTOR(0 DOWNTO 0);                         --enable writing values to input ram
-           output_img_enable : out STD_LOGIC_VECTOR(0 DOWNTO 0);                        --enable writing values to output ram
-           input_img_address : out STD_LOGIC_VECTOR (address_width-1 downto 0);         --address for reading values from input ram
-           output_img_address : out STD_LOGIC_VECTOR (address_width-1 downto 0));       --address for writing values to output ram
+           input_img_enable_out : out STD_LOGIC_VECTOR(0 DOWNTO 0);                         --enable writing values to input ram
+           output_img_enable_out : out STD_LOGIC_VECTOR(0 DOWNTO 0);                        --enable writing values to output ram
+           input_img_address_out : out STD_LOGIC_VECTOR (address_width-1 downto 0);         --address for reading values from input ram
+           output_img_address_out : out STD_LOGIC_VECTOR (address_width-1 downto 0));       --address for writing values to output ram
            
 end padding;
 
@@ -53,7 +53,7 @@ architecture Behavioral of padding is
 
 begin
 
-process (clock, input_img, reset, enable_in)
+process (clk, input_img_in, rst_n, enable_in)
 
     --define constants and variables used for padding process
     constant input_img_size : integer := input_width * input_width;                     --size of input image in pixels
@@ -69,18 +69,18 @@ process (clock, input_img, reset, enable_in)
     
     begin
     
-    --reset to initial state
-        if (reset = '1') then
+    --rst_n to initial state
+        if (rst_n = '1') then
             output_pixel_counter := 0;
             read_delay := 0;
             write_delay := 0;
             enable_out <= '0';
-            input_img_enable <= "0";
-            output_img_enable <= "0";
-            input_img_address <= "0000000000";
-            output_img_address <= "0000000000";
+            input_img_enable_out <= "0";
+            output_img_enable_out <= "0";
+            input_img_address_out <= "0000000000";
+            output_img_address_out <= "0000000000";
                     
-        elsif rising_edge(clock) then
+        elsif rising_edge(clk) then
             if enable_in = '1' then
             
                  --if all pixels have been processed, finish output
@@ -88,7 +88,7 @@ process (clock, input_img, reset, enable_in)
                     enable_out <= '1';
                  end if; 
                              
-                 output_img_enable <= "0";            
+                 output_img_enable_out <= "0";            
                  
                  --read a value from the image
                  pad_x_index := output_pixel_counter mod output_width;
@@ -113,17 +113,17 @@ process (clock, input_img, reset, enable_in)
                  
                  if (write_delay = 0) then 
                      read_delay := 4;       
-                     input_img_address <= std_logic_vector(to_unsigned((input_width*img_y_index) + img_x_index, address_width));
-                     -- input_img_enable <= "0"; no need to disable since its never enabled 
+                     input_img_address_out <= std_logic_vector(to_unsigned((input_width*img_y_index) + img_x_index, address_width));
+                     -- input_img_enable_out <= "0"; no need to disable since its never enabled 
                  end if;
                   
                               
                      
                  if (read_delay = 0) then
                      write_delay := 4;   
-                     output_img_address <= std_logic_vector(to_unsigned(output_pixel_counter, address_width));                 
-                     output_img <= input_img;
-                     output_img_enable <= "1";
+                     output_img_address_out <= std_logic_vector(to_unsigned(output_pixel_counter, address_width));                 
+                     output_img_out <= input_img_in;
+                     output_img_enable_out <= "1";
                      output_pixel_counter := output_pixel_counter + 1;
                  end if;
                         
