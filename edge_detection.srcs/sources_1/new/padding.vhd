@@ -32,20 +32,20 @@ use IEEE.NUMERIC_STD.ALL;
 --use UNISIM.VComponents.all;
 
 entity padding is generic (
-     pixel_depth_g: integer := 8;                                                         --bit depth of an individual pixel
-     input_width_g : integer := 25;                                                        --width of input image in pixels
+     pixel_depth_g: integer := 8;                                                            --bit depth of an individual pixel
+     input_width_g : integer := 25;                                                          --width of input image in pixels
      address_width_g : integer := 10);  
  
   Port (   input_img_in : in STD_LOGIC_VECTOR (pixel_depth_g-1 downto 0);                    -- data bus for incoming image (input ram)
-           output_img_out : out STD_LOGIC_VECTOR (pixel_depth_g-1 downto 0);                  -- data bus for output image after convolution (output ram)
+           output_img_out : out STD_LOGIC_VECTOR (pixel_depth_g-1 downto 0);                 -- data bus for output image after padding (output ram)
            clk : in STD_LOGIC;
            rst_n : in STD_LOGIC;
-           enable_in : in STD_LOGIC;                                                    --enable convolve module
-           enable_out : out STD_LOGIC;                                                  --enable the output of the module (indicate that convolution is complete)
-           input_img_enable_out : out STD_LOGIC_VECTOR(0 DOWNTO 0);                         --enable writing values to input ram
-           output_img_enable_out : out STD_LOGIC_VECTOR(0 DOWNTO 0);                        --enable writing values to output ram
-           input_img_address_out : out STD_LOGIC_VECTOR (address_width_g-1 downto 0);         --address for reading values from input ram
-           output_img_address_out : out STD_LOGIC_VECTOR (address_width_g-1 downto 0));       --address for writing values to output ram
+           enable_in : in STD_LOGIC;                                                         --enable padding module
+           enable_out : out STD_LOGIC;                                                       --enable the output of the module (indicate that padding is complete)
+           input_img_enable_out : out STD_LOGIC_VECTOR(0 DOWNTO 0);                          --enable writing values to input ram
+           output_img_enable_out : out STD_LOGIC_VECTOR(0 DOWNTO 0);                         --enable writing values to output ram
+           input_img_address_out : out STD_LOGIC_VECTOR (address_width_g-1 downto 0);        --address for reading values from input ram
+           output_img_address_out : out STD_LOGIC_VECTOR (address_width_g-1 downto 0));      --address for writing values to output ram
            
 end padding;
 
@@ -56,14 +56,14 @@ begin
 pad_image : process (clk, input_img_in, rst_n, enable_in)
 
     --define constants and variables used for padding process
-    constant input_img_size : integer := input_width_g * input_width_g;                     --size of input image in pixels
-    constant output_width : integer := input_width_g +2;                                  --width of output image in pixels
+    constant input_img_size : integer := input_width_g * input_width_g;                 --size of input image in pixels
+    constant output_width : integer := input_width_g +2;                                --width of output image in pixels
     constant output_img_size : integer := output_width * output_width;                  --size of output image in pixels
-    variable output_pixel_counter : integer := 0;                                       --used for stepping through each pixel in output image (0 -> output_img_size)
+    variable output_pixel_counter : integer := 0;                                       --pixel cout of output image
     variable pad_x_index : integer := 0;                                                --horizontal index of output image pixel
     variable pad_y_index : integer := 0;                                                --vertical index of output image pixel
-    variable img_x_index : integer := 0;                                                --horizontal index of output image pixel
-    variable img_y_index : integer := 0;                                                --vertical index of output image pixel
+    variable img_x_index : integer := 0;                                                --horizontal index of input image pixel
+    variable img_y_index : integer := 0;                                                --vertical index of input image pixel
     variable read_delay : integer := 3;                                                 --ram read delay counter
     variable write_delay : integer := 3;                                                --ram write delay counter
     
@@ -90,35 +90,30 @@ pad_image : process (clk, input_img_in, rst_n, enable_in)
                              
                  output_img_enable_out <= "0";            
                  
-                 --read a value from the image
+                 --calculate x, y indexes of output image from output image counter
                  pad_x_index := output_pixel_counter mod output_width;
                  pad_y_index := output_pixel_counter / output_width;
                  
-                 
+                 --calculate x, y indexes of input image from output image indexes
                  if (pad_x_index = 0) then 
                     img_x_index := 0;
-                                     
                  elsif (pad_x_index > 0 and pad_x_index < (output_width - 1)) then
                     img_x_index := pad_x_index - 1;
                  end if;
-                 
-                 
+            
                  if (pad_y_index = 0) then
-                    img_y_index := 0;
-                                     
+                    img_y_index := 0;        
                  elsif (pad_y_index > 0 and pad_y_index < (output_width - 1)) then
                     img_y_index := pad_y_index - 1;
                  end if;      
                  
-                 
+                 --read input image pixel from input ram
                  if (write_delay = 0) then 
                      read_delay := 4;       
                      input_img_address_out <= std_logic_vector(to_unsigned((input_width_g*img_y_index) + img_x_index, address_width_g));
-                     -- input_img_enable_out <= "0"; no need to disable since its never enabled 
                  end if;
-                  
-                              
                      
+                 --write the input image pixel to intermediate ram    
                  if (read_delay = 0) then
                      write_delay := 4;   
                      output_img_address_out <= std_logic_vector(to_unsigned(output_pixel_counter, address_width_g));                 
