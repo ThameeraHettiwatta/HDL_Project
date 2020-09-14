@@ -1,0 +1,106 @@
+Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2019.2 (win64) Build 2708876 Wed Nov  6 21:40:23 MST 2019
+| Date         : Tue Sep 15 00:48:56 2020
+| Host         : SkyNet running 64-bit major release  (build 9200)
+| Command      : report_control_sets -verbose -file main_control_sets_placed.rpt
+| Design       : main
+| Device       : xc7a35t
+------------------------------------------------------------------------------------
+
+Control Set Information
+
+Table of Contents
+-----------------
+1. Summary
+2. Histogram
+3. Flip-Flop Distribution
+4. Detailed Control Set Information
+
+1. Summary
+----------
+
++----------------------------------------------------------+-------+
+|                          Status                          | Count |
++----------------------------------------------------------+-------+
+| Total control sets                                       |    28 |
+|    Minimum number of control sets                        |    28 |
+|    Addition due to synthesis replication                 |     0 |
+|    Addition due to physical synthesis replication        |     0 |
+| Unused register locations in slices containing registers |    63 |
++----------------------------------------------------------+-------+
+* Control sets can be merged at opt_design using control_set_merge or merge_equivalent_drivers
+** Run report_qor_suggestions for automated merging and remapping suggestions
+
+
+2. Histogram
+------------
+
++--------------------+-------+
+|       Fanout       | Count |
++--------------------+-------+
+| Total control sets |    28 |
+| >= 0 to < 4        |     1 |
+| >= 4 to < 6        |     7 |
+| >= 6 to < 8        |     3 |
+| >= 8 to < 10       |     5 |
+| >= 10 to < 12      |     1 |
+| >= 12 to < 14      |     1 |
+| >= 14 to < 16      |     0 |
+| >= 16              |    10 |
++--------------------+-------+
+* Control sets can be remapped at either synth_design or opt_design
+
+
+3. Flip-Flop Distribution
+-------------------------
+
++--------------+-----------------------+------------------------+-----------------+--------------+
+| Clock Enable | Synchronous Set/Reset | Asynchronous Set/Reset | Total Registers | Total Slices |
++--------------+-----------------------+------------------------+-----------------+--------------+
+| No           | No                    | No                     |              16 |            7 |
+| No           | No                    | Yes                    |              12 |            6 |
+| No           | Yes                   | No                     |              53 |           18 |
+| Yes          | No                    | No                     |              19 |            6 |
+| Yes          | No                    | Yes                    |             242 |           61 |
+| Yes          | Yes                   | No                     |              83 |           23 |
++--------------+-----------------------+------------------------+-----------------+--------------+
+
+
+4. Detailed Control Set Information
+-----------------------------------
+
++----------------+-------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------+------------------+----------------+
+|  Clock Signal  |                                                   Enable Signal                                                   |                                                      Set/Reset Signal                                                      | Slice Load Count | Bel Load Count |
++----------------+-------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------+------------------+----------------+
+|  clk_IBUF_BUFG | fsm1/edge_detection_done_out_i_1_n_0                                                                              | conv1/rst_n                                                                                                                |                1 |              1 |
+|  clk_IBUF_BUFG | uart1/uart_communication_unit_1_comm/axi_rx_sub_state0                                                            |                                                                                                                            |                1 |              4 |
+|  clk_IBUF_BUFG | uart1/uart_communication_unit_1_comm/axi_set_cr_sub_state[3]_i_1_n_0                                              |                                                                                                                            |                1 |              4 |
+|  clk_IBUF_BUFG | uart1/uart_communication_unit_1_comm/axi_tx_sub_state0                                                            |                                                                                                                            |                2 |              4 |
+|  clk_IBUF_BUFG | uart1/axi_uartlite_module_1_auu/U0/AXI_LITE_IPIF_I/I_SLAVE_ATTACHMENT/start2                                      | uart1/axi_uartlite_module_1_auu/U0/AXI_LITE_IPIF_I/I_SLAVE_ATTACHMENT/I_DECODER/cs_ce_clr                                  |                1 |              4 |
+|  clk_IBUF_BUFG | uart1/axi_uartlite_module_1_auu/U0/UARTLITE_CORE_I/BAUD_RATE_I/p_11_out[0]                                        |                                                                                                                            |                1 |              4 |
+|  clk_IBUF_BUFG | uart1/uart_communication_unit_1_comm/uart_s_axi_awaddr_out0                                                       |                                                                                                                            |                1 |              5 |
+|  clk_IBUF_BUFG | uart1/uart_communication_unit_1_comm/uart_s_axi_awaddr_out0                                                       | uart1/uart_communication_unit_1_comm/uart_s_axi_wdata_out[7]_i_1_n_0                                                       |                2 |              5 |
+|  clk_IBUF_BUFG |                                                                                                                   | uart1/axi_uartlite_module_1_auu/U0/UARTLITE_CORE_I/UARTLITE_TX_I/SRL_FIFO_I/I_SRL_FIFO_RBU_F/CNTR_INCR_DECR_ADDN_F_I/SS[0] |                2 |              6 |
+|  clk_IBUF_BUFG |                                                                                                                   | uart1/axi_uartlite_module_1_auu/U0/UARTLITE_CORE_I/UARTLITE_RX_I/SRL_FIFO_I/I_SRL_FIFO_RBU_F/CNTR_INCR_DECR_ADDN_F_I/SS[0] |                2 |              6 |
+|  clk_IBUF_BUFG | uart1/axi_uartlite_module_1_auu/U0/UARTLITE_CORE_I/BAUD_RATE_I/p_11_out[0]                                        | uart1/axi_uartlite_module_1_auu/U0/UARTLITE_CORE_I/UARTLITE_RX_I/SERIAL_TO_PARALLEL[8].fifo_din[8]_i_1_n_0                 |                2 |              7 |
+|  clk_IBUF_BUFG | uart1/uart_communication_unit_1_comm/pix_data[7]_i_1_n_0                                                          | conv1/rst_n                                                                                                                |                1 |              8 |
+|  clk_IBUF_BUFG | uart1/axi_uartlite_module_1_auu/U0/AXI_LITE_IPIF_I/I_SLAVE_ATTACHMENT/I_DECODER/fifo_wr                           |                                                                                                                            |                1 |              8 |
+|  clk_IBUF_BUFG | uart1/axi_uartlite_module_1_auu/U0/AXI_LITE_IPIF_I/I_SLAVE_ATTACHMENT/s_axi_rresp_i                               | uart1/axi_uartlite_module_1_auu/U0/AXI_LITE_IPIF_I/I_SLAVE_ATTACHMENT/rst                                                  |                3 |              8 |
+|  clk_IBUF_BUFG | uart1/axi_uartlite_module_1_auu/U0/UARTLITE_CORE_I/UARTLITE_RX_I/SRL_FIFO_I/I_SRL_FIFO_RBU_F/DYNSHREG_F_I/fifo_wr |                                                                                                                            |                1 |              8 |
+|  clk_IBUF_BUFG | uart1/uart_communication_unit_1_comm/FSM_onehot_comm_state[8]_i_1_n_0                                             | conv1/rst_n                                                                                                                |                3 |              9 |
+|  clk_IBUF_BUFG |                                                                                                                   | uart1/axi_uartlite_module_1_auu/U0/AXI_LITE_IPIF_I/I_SLAVE_ATTACHMENT/rst                                                  |                4 |             10 |
+|  clk_IBUF_BUFG |                                                                                                                   | conv1/rst_n                                                                                                                |                6 |             12 |
+|  clk_IBUF_BUFG |                                                                                                                   |                                                                                                                            |                7 |             16 |
+|  clk_IBUF_BUFG | uart1/axi_uartlite_module_1_auu/U0/UARTLITE_CORE_I/BAUD_RATE_I/p_11_out[0]                                        | uart1/axi_uartlite_module_1_auu/U0/UARTLITE_CORE_I/UARTLITE_RX_I/s_axi_aresetn_0                                           |                7 |             28 |
+|  clk_IBUF_BUFG |                                                                                                                   | uart1/axi_uartlite_module_1_auu/U0/UARTLITE_CORE_I/UARTLITE_RX_I/s_axi_aresetn_0                                           |               10 |             31 |
+|  clk_IBUF_BUFG | uart1/uart_communication_unit_1_comm/fetch_wait0                                                                  | uart1/uart_communication_unit_1_comm/fetch_wait[31]_i_1_n_0                                                                |                8 |             31 |
+|  clk_IBUF_BUFG | pad1/output_img_address_out[9]_i_1_n_0                                                                            | conv1/rst_n                                                                                                                |                8 |             32 |
+|  clk_IBUF_BUFG | conv1/output_pixel_counter[0]_i_1_n_0                                                                             | conv1/rst_n                                                                                                                |                8 |             32 |
+|  clk_IBUF_BUFG | fsm1/enable_in_convolve                                                                                           | conv1/rst_n                                                                                                                |                8 |             32 |
+|  clk_IBUF_BUFG | uart1/uart_communication_unit_1_comm/mem_addra[31]_i_1_n_0                                                        | conv1/rst_n                                                                                                                |                8 |             32 |
+|  clk_IBUF_BUFG | uart1/uart_communication_unit_1_comm/write_wait[31]_i_1_n_0                                                       | conv1/rst_n                                                                                                                |                6 |             32 |
+|  clk_IBUF_BUFG | fsm1/enable_in_padding                                                                                            | conv1/rst_n                                                                                                                |               18 |             64 |
++----------------+-------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------+------------------+----------------+
+
+

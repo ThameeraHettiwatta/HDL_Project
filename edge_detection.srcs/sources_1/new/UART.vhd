@@ -36,14 +36,13 @@ use IEEE.NUMERIC_STD.ALL;
 entity UART is generic (
      pixel_depth_g: integer := 8;                                                         --bit depth of an individual pixel
      input_width_g : integer := 25;                                                       --width of input image in pixels
-     baud_rate : integer := 115200;                                                     --baud rate for comms 
      address_width_g : integer := 10);                                                    --width of memory address (can address upto 2^10 individual pixels)
 
     Port ( input_img_in : in STD_LOGIC_VECTOR (pixel_depth_g-1 downto 0);                    -- data bus for incoming image (input ram)
            output_img_out : out STD_LOGIC_VECTOR (pixel_depth_g-1 downto 0);                  -- data bus for output image after convolution (output ram)
            clk : in STD_LOGIC;
            rst_n : in STD_LOGIC;
-           read_en_in : in STD_LOGIC;                                                      --enable reading from uart
+           read_en_in : in STD_LOGIC;                                                     --enable reading from uart
            write_en_in : in STD_LOGIC;                                                     --enable writing to uart
            read_done_out : out STD_LOGIC;                                                   --indicate reading completion
            write_done_out : out STD_LOGIC;                                                  --indicate writing completion
@@ -58,38 +57,66 @@ end UART;
 
 architecture Behavioral of UART is
 
-component uart_rx is 
-    generic(
-        data_bits_g: integer := pixel_depth_g;      -- data bits  
-        stop_bit_ticks_g: integer := 16   -- ticks for stop bits  
-    );
-    Port ( rx_in : in STD_LOGIC;
-           clk : in STD_LOGIC;
-           rst_n: in STD_LOGIC;
-           tick_in : in STD_LOGIC;
-           rx_done_out : out STD_LOGIC;
-           data_out : out STD_LOGIC_VECTOR (7 downto 0));
-end component;
+component uartComms is
+    Generic (mem_addr_size_g : integer := 10;
+             pixel_data_size_g : integer := 8;
+             base_val : integer := 0);
 
-component uart_tx is
-    generic(
-    DBIT_g : integer := pixel_depth_g ; --  data bits
-        SB_TICK_g : integer := 16 --  ticks for stop bits
-       );
-    port (
-        clk: in std_logic;
-        rst_n: in std_logic;
-        tx_start_in : in std_logic;
-        s_tick_in: in std_logic ;
-        din: in std_logic_vector (7 downto 0) ;
-        tx_done_tick_out: out std_logic;
-        tx_out: out std_logic);
-end component;
-
-component baud_generator 
     Port ( clk : in STD_LOGIC;
-           enable : out STD_LOGIC;
-           rst_n : in STD_LOGIC);
+           rst_n : in STD_LOGIC;
+           start_rec_in : in STD_LOGIC;
+           start_send_in : in STD_LOGIC;
+           finished_rec_out : out STD_LOGIC;
+           finished_send_out : out STD_LOGIC;
+           output_image_add_out : out STD_LOGIC_VECTOR (mem_addr_size_g -1 downto 0);
+           input_image_add_out : out STD_LOGIC_VECTOR (mem_addr_size_g -1 downto 0);
+           ioi_dina_out : out STD_LOGIC_VECTOR (pixel_data_size_g -1 downto 0);
+           ioi_douta_in : in STD_LOGIC_VECTOR (pixel_data_size_g -1 downto 0);
+           input_img_we_out : out STD_LOGIC_VECTOR (0 downto 0);
+           output_img_we_out : out STD_LOGIC_VECTOR (0 downto 0);
+           uart_interrupt_in : in STD_LOGIC;
+           uart_s_axi_awaddr_out : out STD_LOGIC_VECTOR(3 DOWNTO 0);
+           uart_s_axi_awvalid_out : out STD_LOGIC;
+           uart_s_axi_awready_in : in STD_LOGIC;
+           uart_s_axi_wdata_out : out STD_LOGIC_VECTOR(31 DOWNTO 0);
+           uart_s_axi_wstrb_out : out STD_LOGIC_VECTOR(3 DOWNTO 0);
+           uart_s_axi_wvalid_out : out STD_LOGIC;
+           uart_s_axi_wready_in : in STD_LOGIC;
+           uart_s_axi_bresp_in : in STD_LOGIC_VECTOR(1 DOWNTO 0);
+           uart_s_axi_bvalid_in : in STD_LOGIC;
+           uart_s_axi_bready_out : out STD_LOGIC;
+           uart_s_axi_araddr_out : out STD_LOGIC_VECTOR(3 DOWNTO 0);
+           uart_s_axi_arvalid_out : out STD_LOGIC;
+           uart_s_axi_arready_in : in STD_LOGIC;
+           uart_s_axi_rdata_in : in STD_LOGIC_VECTOR(31 DOWNTO 0);
+           uart_s_axi_rresp_in : in STD_LOGIC_VECTOR(1 DOWNTO 0);
+           uart_s_axi_rvalid_in : in STD_LOGIC;
+           uart_s_axi_rready_out : out STD_LOGIC);
+end component;
+
+component axi_uartlite_0 is
+    Port (s_axi_aclk : IN STD_LOGIC;
+          s_axi_aresetn : IN STD_LOGIC;
+          interrupt : OUT STD_LOGIC;
+          s_axi_awaddr : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
+          s_axi_awvalid : IN STD_LOGIC;
+          s_axi_awready : OUT STD_LOGIC;
+          s_axi_wdata : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+          s_axi_wstrb : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
+          s_axi_wvalid : IN STD_LOGIC;
+          s_axi_wready : OUT STD_LOGIC;
+          s_axi_bresp : OUT STD_LOGIC_VECTOR(1 DOWNTO 0);
+          s_axi_bvalid : OUT STD_LOGIC;
+          s_axi_bready : IN STD_LOGIC;
+          s_axi_araddr : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
+          s_axi_arvalid : IN STD_LOGIC;
+          s_axi_arready : OUT STD_LOGIC;
+          s_axi_rdata : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+          s_axi_rresp : OUT STD_LOGIC_VECTOR(1 DOWNTO 0);
+          s_axi_rvalid : OUT STD_LOGIC;
+          s_axi_rready : IN STD_LOGIC;
+          rx : IN STD_LOGIC;
+          tx : OUT STD_LOGIC);
 end component;
 
 --signals
@@ -102,109 +129,82 @@ signal tx_done : STD_LOGIC;
 signal receiver_data_out : STD_LOGIC_VECTOR (7 downto 0);                                                           --handle data coming out of the reciever
 signal transmitter_data_in : STD_LOGIC_VECTOR (7 downto 0);                                                         --handle data going in to the transmitter
 
+signal s_axi_awaddr_comm_to_auu : STD_LOGIC_VECTOR(3 DOWNTO 0);
+signal s_axi_awvalid_comm_to_auu : STD_LOGIC;
+signal s_axi_awready_auu_to_comm : STD_LOGIC;
+signal s_axi_wdata_comm_to_auu : STD_LOGIC_VECTOR(31 DOWNTO 0);
+signal s_axi_wstrb_comm_to_auu : STD_LOGIC_VECTOR(3 DOWNTO 0);
+signal s_axi_wvalid_comm_to_auu : STD_LOGIC;
+signal s_axi_wready_auu_to_comm : STD_LOGIC;
+signal s_axi_bresp_auu_to_comm : STD_LOGIC_VECTOR(1 DOWNTO 0);
+signal s_axi_bvalid_auu_to_comm : STD_LOGIC;
+signal s_axi_bready_comm_to_auu : STD_LOGIC;
+signal s_axi_araddr_comm_to_auu : STD_LOGIC_VECTOR(3 DOWNTO 0);
+signal s_axi_arvalid_comm_to_auu : STD_LOGIC;
+signal s_axi_arready_auu_to_comm : STD_LOGIC;
+signal s_axi_rdata_auu_to_comm : STD_LOGIC_VECTOR(31 DOWNTO 0);
+signal s_axi_rresp_auu_to_comm : STD_LOGIC_VECTOR(1 DOWNTO 0);
+signal s_axi_rvalid_auu_to_comm : STD_LOGIC;
+signal s_axi_rready_comm_to_auu : STD_LOGIC;
+signal interrupt_auu_to_comm : STD_LOGIC;
+
 begin
 
-    receiver : uart_rx
-    port map (rx_in => rx_in,
-               clk => clk,
-               rst_n => rst_n_rec,
-               tick_in => tick,
-               rx_done_out => rx_done,
-               data_out => receiver_data_out);
 
-    transmitter : uart_tx
+uart_communication_unit_1_comm : uartComms
     port map (clk => clk,
-        rst_n => rst_n_trans,
-        tx_start_in => tx_start,
-        s_tick_in => tick,
-        din => transmitter_data_in,
-        tx_done_tick_out => tx_done,
-        tx_out => tx_out);
+              rst_n =>rst_n,
+              start_rec_in => read_en_in,
+              start_send_in => write_en_in,
+              finished_send_out => write_done_out,
+              finished_rec_out => read_done_out,
+              output_image_add_out => output_img_address_out,
+              input_image_add_out => input_img_address_out,
+              ioi_douta_in => input_img_in,
+              ioi_dina_out => output_img_out,
+              input_img_we_out => input_img_enable_out,
+              output_img_we_out => output_img_enable_out,
+              uart_interrupt_in => interrupt_auu_to_comm,
+              uart_s_axi_awaddr_out => s_axi_awaddr_comm_to_auu,
+              uart_s_axi_awvalid_out => s_axi_awvalid_comm_to_auu,
+              uart_s_axi_awready_in => s_axi_awready_auu_to_comm,
+              uart_s_axi_wdata_out => s_axi_wdata_comm_to_auu,
+              uart_s_axi_wstrb_out => s_axi_wstrb_comm_to_auu,
+              uart_s_axi_wvalid_out => s_axi_wvalid_comm_to_auu,
+              uart_s_axi_wready_in => s_axi_wready_auu_to_comm,
+              uart_s_axi_bresp_in => s_axi_bresp_auu_to_comm,
+              uart_s_axi_bvalid_in => s_axi_bvalid_auu_to_comm,
+              uart_s_axi_bready_out => s_axi_bready_comm_to_auu,
+              uart_s_axi_araddr_out => s_axi_araddr_comm_to_auu,
+              uart_s_axi_arvalid_out => s_axi_arvalid_comm_to_auu,
+              uart_s_axi_arready_in => s_axi_arready_auu_to_comm,
+              uart_s_axi_rdata_in => s_axi_rdata_auu_to_comm,
+              uart_s_axi_rresp_in => s_axi_rresp_auu_to_comm,
+              uart_s_axi_rvalid_in => s_axi_rvalid_auu_to_comm,
+              uart_s_axi_rready_out => s_axi_rready_comm_to_auu);
 
-    baud_gen : baud_generator
-    port map(  clk => clk,
-               enable => tick,
-               rst_n => rst_n);
+axi_uartlite_module_1_auu : axi_uartlite_0
+    port map (s_axi_aclk => clk,
+              s_axi_aresetn => rst_n,
+              interrupt => interrupt_auu_to_comm,
+              s_axi_awaddr => s_axi_awaddr_comm_to_auu,
+              s_axi_awvalid => s_axi_awvalid_comm_to_auu,
+              s_axi_awready => s_axi_awready_auu_to_comm,
+              s_axi_wdata => s_axi_wdata_comm_to_auu,
+              s_axi_wstrb => s_axi_wstrb_comm_to_auu,
+              s_axi_wvalid => s_axi_wvalid_comm_to_auu,
+              s_axi_wready => s_axi_wready_auu_to_comm,
+              s_axi_bresp => s_axi_bresp_auu_to_comm,
+              s_axi_bvalid => s_axi_bvalid_auu_to_comm,
+              s_axi_bready => s_axi_bready_comm_to_auu,
+              s_axi_araddr => s_axi_araddr_comm_to_auu,
+              s_axi_arvalid => s_axi_arvalid_comm_to_auu,
+              s_axi_arready => s_axi_arready_auu_to_comm,
+              s_axi_rdata => s_axi_rdata_auu_to_comm,
+              s_axi_rresp => s_axi_rresp_auu_to_comm,
+              s_axi_rvalid => s_axi_rvalid_auu_to_comm,
+              s_axi_rready => s_axi_rready_comm_to_auu,
+              rx => rx_in,
+              tx => tx_out);
                
-    uart_comms : process (clk, input_img_in, rst_n, read_en_in, write_en_in)
-    
-    constant input_img_size : integer := input_width_g * input_width_g;                     --size of input image in pixels
-    constant delay : integer := 3;                                                      --delay before transmitting data (3 clk cycles)
-    variable input_pixel_counter : integer := 0;                                        --keep track of number of pixels read from ram
-    variable output_pixel_counter : integer := 0;                                       --keep track of number of pixels sent ram
-    variable read_complete : STD_LOGIC := '0';                                          --indicate that all pixels have been read
-    variable write_complete : STD_LOGIC := '0';                                          --indicate that all pixels have been written
-    variable img_pixel : integer := 0;                                                  --used for storing image pixel value read from ram
-    variable current_delay : integer := 0;                                              --used to maintain the tranmission delay
-    
-    begin
-    
-        --rst_n to initial state
-        if (rst_n = '0') then
-
-            write_done_out <= '0';
-            read_done_out <= '0';
-            read_complete := '0';                                                                                           
-            write_complete := '0';                                                                                           
-            input_pixel_counter := 0;                                                                                      
-            output_pixel_counter := 0;                                                                                      
-            input_img_enable_out <= "0";
-            output_img_enable_out <= "0";
-            input_img_address_out <= "0000000000";
-            output_img_address_out <= "0000000000";
-            rst_n_rec <= '0';
-            rst_n_trans <= '0';
-            tx_done <= '1';
-            tx_start <= '0';
-            
-        elsif rising_edge(clk) then
-        
-            --save incoming image 
-            if (read_en_in = '1') then
-                rst_n_rec <= '1';
-                if (read_complete = '0') then                                                                               --reading is not complete
-                    if (rx_done = '1') then                                                                                 --a pixel is ready
-                        output_img_address_out <= std_logic_vector(to_unsigned(output_pixel_counter, address_width_g));           --set up address to write
-                        output_img_out <= receiver_data_out;
-                        output_img_enable_out <= "1";
-                        output_pixel_counter := output_pixel_counter + 1;                                                   --increment pixel counter
-                        
-                        if (output_pixel_counter >= input_img_size) then                                                    --check if entire image has been read
-                            read_complete := '1';
-                            read_done_out <= '1';
-                        end if;
-                    else
-                        output_img_enable_out <= "0";
-                    end if;
-                    
-                end if;
-            end if;
-            
-            --send output image 
-            if (write_en_in = '1') then
-                rst_n_trans <= '1';
-                if (write_complete = '0') then                                                                                   --writing is not complete
-                    if (input_pixel_counter <= input_img_size) then                                                              --check if entire image has been read
-                        if (tx_done = '1') or (input_pixel_counter = 0) then                                                     --we can only read a new pixel if the previous pixel is done / process hasn't begun
-                            --read a pixel from RAM
-                            input_img_address_out <= std_logic_vector(to_unsigned(input_pixel_counter, address_width_g));
-                            transmitter_data_in <= input_img_in;                                                                    --shouldn't be used for 3 more clk cycles
-                            if (current_delay >= delay) then                                                                     --delay for 3 clk cycles
-                                tx_start <= '1';
-                                input_pixel_counter := input_pixel_counter +1;                                                   --increment counter
-                            else
-                                current_delay := current_delay + 1;
-                            end if;
-                        else
-                            tx_start <= '0';
-                        end if;
-                    else
-                        write_complete := '1';
-                    end if;
-                 end if;
-              end if;        
-
-        end if;
-        
-    end process uart_comms;
     end Behavioral;
