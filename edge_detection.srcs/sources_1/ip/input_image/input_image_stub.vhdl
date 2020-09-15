@@ -1,11 +1,11 @@
 -- Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2019.2 (win64) Build 2708876 Wed Nov  6 21:40:23 MST 2019
--- Date        : Thu Jul 23 16:14:43 2020
+-- Date        : Mon Jul 27 21:33:53 2020
 -- Host        : THAMEERA-PC running 64-bit major release  (build 9200)
 -- Command     : write_vhdl -force -mode synth_stub -rename_top input_image -prefix
---               input_image_ input_image_stub.vhdl
--- Design      : input_image
+--               input_image_ output_image_stub.vhdl
+-- Design      : output_image
 -- Purpose     : Stub declaration of top-level module interface
 -- Device      : xc7a35tcpg236-1
 -- --------------------------------------------------------------------------------

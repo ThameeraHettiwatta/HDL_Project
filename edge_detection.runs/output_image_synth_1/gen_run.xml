@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GenRun Id="output_image_synth_1" LaunchPart="xc7a35tcpg236-1" LaunchTime="1595865758">
+<GenRun Id="output_image_synth_1" LaunchPart="xc7a35tcpg236-1" LaunchTime="1600165361">
   <File Type="PA-TCL" Name="output_image.tcl"/>
+  <File Type="RDS-PROPCONSTRS" Name="output_image_drc_synth.rpt"/>
   <File Type="REPORTS-TCL" Name="output_image_reports.tcl"/>
   <File Type="RDS-RDS" Name="output_image.vds"/>
   <File Type="RDS-UTIL" Name="output_image_utilization_synth.rpt"/>
   <File Type="RDS-UTIL-PB" Name="output_image_utilization_synth.pb"/>
   <File Type="RDS-DCP" Name="output_image.dcp"/>
+  <File Type="VDS-TIMINGSUMMARY" Name="output_image_timing_summary_synth.rpt"/>
+  <File Type="VDS-TIMING-PB" Name="output_image_timing_summary_synth.pb"/>
   <FileSet Name="sources" Type="BlockSrcs" RelSrcDir="$PSRCDIR/output_image">
     <File Path="$PSRCDIR/sources_1/ip/output_image/output_image.xci">
       <FileInfo>

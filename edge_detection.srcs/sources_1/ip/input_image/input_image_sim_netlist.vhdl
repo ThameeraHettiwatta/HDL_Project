@@ -1,11 +1,11 @@
 -- Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2019.2 (win64) Build 2708876 Wed Nov  6 21:40:23 MST 2019
--- Date        : Thu Jul 23 16:14:43 2020
+-- Date        : Mon Jul 27 21:33:53 2020
 -- Host        : THAMEERA-PC running 64-bit major release  (build 9200)
 -- Command     : write_vhdl -force -mode funcsim -rename_top input_image -prefix
---               input_image_ input_image_sim_netlist.vhdl
--- Design      : input_image
+--               input_image_ output_image_sim_netlist.vhdl
+-- Design      : output_image
 -- Purpose     : This VHDL netlist is a functional simulation representation of the design and should not be modified or
 --               synthesized. This netlist cannot be used for SDF annotated simulation.
 -- Device      : xc7a35tcpg236-1
@@ -14,7 +14,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity input_image_blk_mem_gen_prim_wrapper_init is
+entity input_image_blk_mem_gen_prim_wrapper is
   port (
     douta : out STD_LOGIC_VECTOR ( 7 downto 0 );
     doutb : out STD_LOGIC_VECTOR ( 7 downto 0 );
@@ -27,9 +27,9 @@ entity input_image_blk_mem_gen_prim_wrapper_init is
     wea : in STD_LOGIC_VECTOR ( 0 to 0 );
     web : in STD_LOGIC_VECTOR ( 0 to 0 )
   );
-end input_image_blk_mem_gen_prim_wrapper_init;
+end input_image_blk_mem_gen_prim_wrapper;
 
-architecture STRUCTURE of input_image_blk_mem_gen_prim_wrapper_init is
+architecture STRUCTURE of input_image_blk_mem_gen_prim_wrapper is
   signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM18.ram_n_0\ : STD_LOGIC;
   signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM18.ram_n_1\ : STD_LOGIC;
   signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM18.ram_n_16\ : STD_LOGIC;
@@ -65,8 +65,8 @@ begin
       INITP_05 => X"0000000000000000000000000000000000000000000000000000000000000000",
       INITP_06 => X"0000000000000000000000000000000000000000000000000000000000000000",
       INITP_07 => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_00 => X"00B40099002F006B004100AF008E00C900A8006E00AB005E00940081008400A3",
-      INIT_01 => X"0000000000000000000000000000006400D4008E003500AE00D700580088007C",
+      INIT_00 => X"0000000000000000000000000000000000000000000000000000000000000000",
+      INIT_01 => X"0000000000000000000000000000000000000000000000000000000000000000",
       INIT_02 => X"0000000000000000000000000000000000000000000000000000000000000000",
       INIT_03 => X"0000000000000000000000000000000000000000000000000000000000000000",
       INIT_04 => X"0000000000000000000000000000000000000000000000000000000000000000",
@@ -226,7 +226,7 @@ end input_image_blk_mem_gen_prim_width;
 
 architecture STRUCTURE of input_image_blk_mem_gen_prim_width is
 begin
-\prim_init.ram\: entity work.input_image_blk_mem_gen_prim_wrapper_init
+\prim_noinit.ram\: entity work.input_image_blk_mem_gen_prim_wrapper
      port map (
       addra(9 downto 0) => addra(9 downto 0),
       addrb(9 downto 0) => addrb(9 downto 0),
@@ -498,13 +498,13 @@ entity input_image_blk_mem_gen_v8_4_4 is
   attribute C_INITB_VAL : string;
   attribute C_INITB_VAL of input_image_blk_mem_gen_v8_4_4 : entity is "0";
   attribute C_INIT_FILE : string;
-  attribute C_INIT_FILE of input_image_blk_mem_gen_v8_4_4 : entity is "input_image.mem";
+  attribute C_INIT_FILE of input_image_blk_mem_gen_v8_4_4 : entity is "output_image.mem";
   attribute C_INIT_FILE_NAME : string;
-  attribute C_INIT_FILE_NAME of input_image_blk_mem_gen_v8_4_4 : entity is "input_image.mif";
+  attribute C_INIT_FILE_NAME of input_image_blk_mem_gen_v8_4_4 : entity is "no_coe_file_loaded";
   attribute C_INTERFACE_TYPE : integer;
   attribute C_INTERFACE_TYPE of input_image_blk_mem_gen_v8_4_4 : entity is 0;
   attribute C_LOAD_INIT_FILE : integer;
-  attribute C_LOAD_INIT_FILE of input_image_blk_mem_gen_v8_4_4 : entity is 1;
+  attribute C_LOAD_INIT_FILE of input_image_blk_mem_gen_v8_4_4 : entity is 0;
   attribute C_MEM_TYPE : integer;
   attribute C_MEM_TYPE of input_image_blk_mem_gen_v8_4_4 : entity is 2;
   attribute C_MUX_PIPELINE_STAGES : integer;
@@ -662,7 +662,7 @@ entity input_image is
   attribute NotValidForBitStream : boolean;
   attribute NotValidForBitStream of input_image : entity is true;
   attribute CHECK_LICENSE_TYPE : string;
-  attribute CHECK_LICENSE_TYPE of input_image : entity is "input_image,blk_mem_gen_v8_4_4,{}";
+  attribute CHECK_LICENSE_TYPE of input_image : entity is "output_image,blk_mem_gen_v8_4_4,{}";
   attribute downgradeipidentifiedwarnings : string;
   attribute downgradeipidentifiedwarnings of input_image : entity is "yes";
   attribute x_core_info : string;
@@ -772,13 +772,13 @@ architecture STRUCTURE of input_image is
   attribute C_INITB_VAL : string;
   attribute C_INITB_VAL of U0 : label is "0";
   attribute C_INIT_FILE : string;
-  attribute C_INIT_FILE of U0 : label is "input_image.mem";
+  attribute C_INIT_FILE of U0 : label is "output_image.mem";
   attribute C_INIT_FILE_NAME : string;
-  attribute C_INIT_FILE_NAME of U0 : label is "input_image.mif";
+  attribute C_INIT_FILE_NAME of U0 : label is "no_coe_file_loaded";
   attribute C_INTERFACE_TYPE : integer;
   attribute C_INTERFACE_TYPE of U0 : label is 0;
   attribute C_LOAD_INIT_FILE : integer;
-  attribute C_LOAD_INIT_FILE of U0 : label is 1;
+  attribute C_LOAD_INIT_FILE of U0 : label is 0;
   attribute C_MEM_TYPE : integer;
   attribute C_MEM_TYPE of U0 : label is 2;
   attribute C_MUX_PIPELINE_STAGES : integer;

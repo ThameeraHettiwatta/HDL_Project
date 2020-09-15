@@ -1,10 +1,10 @@
 // Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2019.2 (win64) Build 2708876 Wed Nov  6 21:40:23 MST 2019
-// Date        : Mon Jul 27 21:33:54 2020
-// Host        : THAMEERA-PC running 64-bit major release  (build 9200)
-// Command     : write_verilog -force -mode funcsim {d:/thameera/ACA
-//               Folder/sem8/hdl/project/HDL_Project/edge_detection.srcs/sources_1/ip/output_image/output_image_sim_netlist.v}
+// Date        : Tue Sep 15 15:54:01 2020
+// Host        : SkyNet running 64-bit major release  (build 9200)
+// Command     : write_verilog -force -mode funcsim
+//               D:/code/HDL/HDL_Project/edge_detection.srcs/sources_1/ip/output_image/output_image_sim_netlist.v
 // Design      : output_image
 // Purpose     : This verilog netlist is a functional simulation representation of the design and should not be modified
 //               or synthesized. This netlist cannot be used for SDF annotated simulation.
@@ -128,7 +128,7 @@ module output_image
   (* C_USE_BRAM_BLOCK = "0" *) 
   (* C_USE_BYTE_WEA = "1" *) 
   (* C_USE_BYTE_WEB = "1" *) 
-  (* C_USE_DEFAULT_DATA = "0" *) 
+  (* C_USE_DEFAULT_DATA = "1" *) 
   (* C_USE_ECC = "0" *) 
   (* C_USE_SOFTECC = "0" *) 
   (* C_USE_URAM = "0" *) 
@@ -289,7 +289,7 @@ module output_image_blk_mem_gen_prim_width
   wire [0:0]wea;
   wire [0:0]web;
 
-  output_image_blk_mem_gen_prim_wrapper \prim_noinit.ram 
+  output_image_blk_mem_gen_prim_wrapper_init \prim_init.ram 
        (.addra(addra),
         .addrb(addrb),
         .clka(clka),
@@ -302,8 +302,8 @@ module output_image_blk_mem_gen_prim_width
         .web(web));
 endmodule
 
-(* ORIG_REF_NAME = "blk_mem_gen_prim_wrapper" *) 
-module output_image_blk_mem_gen_prim_wrapper
+(* ORIG_REF_NAME = "blk_mem_gen_prim_wrapper_init" *) 
+module output_image_blk_mem_gen_prim_wrapper_init
    (douta,
     doutb,
     clka,
@@ -549,7 +549,7 @@ endmodule
 (* C_READ_LATENCY_B = "1" *) (* C_READ_WIDTH_A = "8" *) (* C_READ_WIDTH_B = "8" *) 
 (* C_RSTRAM_A = "0" *) (* C_RSTRAM_B = "0" *) (* C_RST_PRIORITY_A = "CE" *) 
 (* C_RST_PRIORITY_B = "CE" *) (* C_SIM_COLLISION_CHECK = "ALL" *) (* C_USE_BRAM_BLOCK = "0" *) 
-(* C_USE_BYTE_WEA = "1" *) (* C_USE_BYTE_WEB = "1" *) (* C_USE_DEFAULT_DATA = "0" *) 
+(* C_USE_BYTE_WEA = "1" *) (* C_USE_BYTE_WEB = "1" *) (* C_USE_DEFAULT_DATA = "1" *) 
 (* C_USE_ECC = "0" *) (* C_USE_SOFTECC = "0" *) (* C_USE_URAM = "0" *) 
 (* C_WEA_WIDTH = "1" *) (* C_WEB_WIDTH = "1" *) (* C_WRITE_DEPTH_A = "625" *) 
 (* C_WRITE_DEPTH_B = "625" *) (* C_WRITE_MODE_A = "WRITE_FIRST" *) (* C_WRITE_MODE_B = "WRITE_FIRST" *) 

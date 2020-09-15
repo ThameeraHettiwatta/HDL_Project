@@ -1,10 +1,10 @@
 -- Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2019.2 (win64) Build 2708876 Wed Nov  6 21:40:23 MST 2019
--- Date        : Mon Jul 27 21:33:54 2020
--- Host        : THAMEERA-PC running 64-bit major release  (build 9200)
--- Command     : write_vhdl -force -mode funcsim {d:/thameera/ACA
---               Folder/sem8/hdl/project/HDL_Project/edge_detection.srcs/sources_1/ip/output_image/output_image_sim_netlist.vhdl}
+-- Date        : Tue Sep 15 15:54:01 2020
+-- Host        : SkyNet running 64-bit major release  (build 9200)
+-- Command     : write_vhdl -force -mode funcsim
+--               D:/code/HDL/HDL_Project/edge_detection.srcs/sources_1/ip/output_image/output_image_sim_netlist.vhdl
 -- Design      : output_image
 -- Purpose     : This VHDL netlist is a functional simulation representation of the design and should not be modified or
 --               synthesized. This netlist cannot be used for SDF annotated simulation.
@@ -14,7 +14,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity output_image_blk_mem_gen_prim_wrapper is
+entity output_image_blk_mem_gen_prim_wrapper_init is
   port (
     douta : out STD_LOGIC_VECTOR ( 7 downto 0 );
     doutb : out STD_LOGIC_VECTOR ( 7 downto 0 );
@@ -28,10 +28,10 @@ entity output_image_blk_mem_gen_prim_wrapper is
     web : in STD_LOGIC_VECTOR ( 0 to 0 )
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of output_image_blk_mem_gen_prim_wrapper : entity is "blk_mem_gen_prim_wrapper";
-end output_image_blk_mem_gen_prim_wrapper;
+  attribute ORIG_REF_NAME of output_image_blk_mem_gen_prim_wrapper_init : entity is "blk_mem_gen_prim_wrapper_init";
+end output_image_blk_mem_gen_prim_wrapper_init;
 
-architecture STRUCTURE of output_image_blk_mem_gen_prim_wrapper is
+architecture STRUCTURE of output_image_blk_mem_gen_prim_wrapper_init is
   signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM18.ram_n_0\ : STD_LOGIC;
   signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM18.ram_n_1\ : STD_LOGIC;
   signal \DEVICE_7SERIES.NO_BMM_INFO.TRUE_DP.SIMPLE_PRIM18.ram_n_16\ : STD_LOGIC;
@@ -230,7 +230,7 @@ end output_image_blk_mem_gen_prim_width;
 
 architecture STRUCTURE of output_image_blk_mem_gen_prim_width is
 begin
-\prim_noinit.ram\: entity work.output_image_blk_mem_gen_prim_wrapper
+\prim_init.ram\: entity work.output_image_blk_mem_gen_prim_wrapper_init
      port map (
       addra(9 downto 0) => addra(9 downto 0),
       addrb(9 downto 0) => addrb(9 downto 0),
@@ -550,7 +550,7 @@ entity output_image_blk_mem_gen_v8_4_4 is
   attribute C_USE_BYTE_WEB : integer;
   attribute C_USE_BYTE_WEB of output_image_blk_mem_gen_v8_4_4 : entity is 1;
   attribute C_USE_DEFAULT_DATA : integer;
-  attribute C_USE_DEFAULT_DATA of output_image_blk_mem_gen_v8_4_4 : entity is 0;
+  attribute C_USE_DEFAULT_DATA of output_image_blk_mem_gen_v8_4_4 : entity is 1;
   attribute C_USE_ECC : integer;
   attribute C_USE_ECC of output_image_blk_mem_gen_v8_4_4 : entity is 0;
   attribute C_USE_SOFTECC : integer;
@@ -826,7 +826,7 @@ architecture STRUCTURE of output_image is
   attribute C_USE_BYTE_WEB : integer;
   attribute C_USE_BYTE_WEB of U0 : label is 1;
   attribute C_USE_DEFAULT_DATA : integer;
-  attribute C_USE_DEFAULT_DATA of U0 : label is 0;
+  attribute C_USE_DEFAULT_DATA of U0 : label is 1;
   attribute C_USE_ECC : integer;
   attribute C_USE_ECC of U0 : label is 0;
   attribute C_USE_SOFTECC : integer;

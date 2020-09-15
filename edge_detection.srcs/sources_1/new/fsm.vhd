@@ -108,7 +108,7 @@ state_machine : process (clk, enable_edge_detection_in, rst_n, convolve_done_in,
                         if (uart_write_done_in = '1') then
                             write_enable_uart_out <= '0';
                             edge_detection_done_out <= '1';
-                            fsm_state <= idle;
+                            --fsm_state <= idle;
                         end if;
                     when others =>
                         fsm_state <= idle;                        

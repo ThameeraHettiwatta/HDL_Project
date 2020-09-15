@@ -8,10 +8,10 @@ vmap xpm riviera/xpm
 vmap xil_defaultlib riviera/xil_defaultlib
 
 vlog -work xpm  -sv2k12 \
-"C:/Xilinx/Vivado/2019.2/data/ip/xpm/xpm_memory/hdl/xpm_memory.sv" \
+"E:/Xilinx/Vivado/2019.2/data/ip/xpm/xpm_memory/hdl/xpm_memory.sv" \
 
 vcom -work xpm -93 \
-"C:/Xilinx/Vivado/2019.2/data/ip/xpm/xpm_VCOMP.vhd" \
+"E:/Xilinx/Vivado/2019.2/data/ip/xpm/xpm_VCOMP.vhd" \
 
 vcom -work xil_defaultlib -93 \
 "../../../../edge_detection.srcs/sources_1/ip/output_image/output_image_sim_netlist.vhdl" \

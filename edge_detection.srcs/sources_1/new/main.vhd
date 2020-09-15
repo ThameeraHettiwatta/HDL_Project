@@ -253,8 +253,8 @@ begin
                    uart_write_done_in => write_done);
                    
     uart1 : uart
-        port map ( input_img_in => input_img_uart,
-                   output_img_out => output_img_uart,
+        port map ( input_img_in => output_img_uart,
+                   output_img_out => input_img_uart,
                    clk => clk,
                    rst_n => rst_n,
                    rx_in => rx_in,
@@ -263,8 +263,8 @@ begin
                    write_en_in => write_en,
                    read_done_out => read_done,
                    write_done_out => write_done,
-                   input_img_enable_out => input_img_enable_out_uart,
-                   output_img_enable_out => output_img_enable_out_uart,
-                   input_img_address_out => input_img_address_out_uart,
-                   output_img_address_out => output_img_address_out_uart);
+                   input_img_enable_out =>  output_img_enable_out_uart,
+                   output_img_enable_out => input_img_enable_out_uart,
+                   input_img_address_out =>  output_img_address_out_uart,
+                   output_img_address_out => input_img_address_out_uart);
 end Behavioral;

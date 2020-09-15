@@ -182,8 +182,8 @@ begin
                     when Idle =>
                         input_img_we_out <= "0";
                         output_img_we_out <= "0";
-                        finished_rec_out <= '0';
-                        finished_send_out <= '0';
+                        --finished_rec_out <= '0';
+                        --finished_send_out <= '0';
                         pix_data <= std_logic_vector(to_unsigned(base_val_g, pix_data 'length));
                         if (start_rec_in = '1') then
                             rec_op <= '1';
@@ -374,6 +374,7 @@ begin
                         output_img_we_out <= "0";
                         if (mem_addra = mem_size-1) then
                             --if all data is recieved, move to done state.
+                            finished_rec_out <= '1';
                             comm_state <= Done;
                         else
                             --get the nect memory loaction to reecive.
@@ -383,6 +384,7 @@ begin
                     when Incrementing_Send =>
                         if (mem_addra = mem_size-1) then
                             --if all data is sent, move to done state.
+                            finished_send_out <= '1';
                             comm_state <= Done;
                         else
                             --get the next memnry location to send.
@@ -397,8 +399,6 @@ begin
                         fetch_wait := 0;
                         pix_data <= std_logic_vector(to_unsigned(base_val_g, pix_data 'length));
                         comm_state <= Idle;
-                        finished_send_out <= '1';
-                        finished_rec_out <= '1';
                     when others =>
                         null;
                 end case;
