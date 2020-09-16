@@ -1,6 +1,6 @@
 Vivado Simulator 2019.2
 Copyright 1986-1999, 2001-2019 Xilinx, Inc. All Rights Reserved.
-Running: E:/Xilinx/Vivado/2019.2/bin/unwrapped/win64.o/xelab.exe -wto 6bb8bf578a9e4aa09ef36645183d6b7a --incr --debug typical --relax --mt 2 -L xil_defaultlib -L secureip -L xpm --snapshot tb_padding_behav xil_defaultlib.tb_padding -log elaborate.log 
+Running: E:/Xilinx/Vivado/2019.2/bin/unwrapped/win64.o/xelab.exe -wto 6bb8bf578a9e4aa09ef36645183d6b7a --incr --debug typical --relax --mt 2 -L xil_defaultlib -L secureip -L xpm --snapshot tb_ram_to_text_behav xil_defaultlib.tb_ram_to_text -log elaborate.log 
 Using 2 slave threads.
 Starting static elaboration
 Completed static elaboration
@@ -10,11 +10,11 @@ Time Resolution for simulation is 1ps
 Compiling package std.standard
 Compiling package std.textio
 Compiling package ieee.std_logic_1164
+Compiling package ieee.std_logic_textio
 Compiling package ieee.numeric_std
 Compiling package unisim.vcomponents
 Compiling package ieee.std_logic_arith
 Compiling package ieee.std_logic_signed
-Compiling package ieee.std_logic_textio
 Compiling package ieee.vital_timing
 Compiling package ieee.vital_primitives
 Compiling package unisim.vpkg
@@ -29,12 +29,6 @@ Compiling architecture structure of entity xil_defaultlib.input_image_blk_mem_ge
 Compiling architecture structure of entity xil_defaultlib.input_image_blk_mem_gen_v8_4_4_synth [input_image_blk_mem_gen_v8_4_4_s...]
 Compiling architecture structure of entity xil_defaultlib.input_image_blk_mem_gen_v8_4_4 [input_image_blk_mem_gen_v8_4_4_d...]
 Compiling architecture structure of entity xil_defaultlib.input_image [input_image_default]
-Compiling architecture structure of entity xil_defaultlib.padded_image_blk_mem_gen_prim_wrapper_init [padded_image_blk_mem_gen_prim_wr...]
-Compiling architecture structure of entity xil_defaultlib.padded_image_blk_mem_gen_prim_width [padded_image_blk_mem_gen_prim_wi...]
-Compiling architecture structure of entity xil_defaultlib.padded_image_blk_mem_gen_generic_cstr [padded_image_blk_mem_gen_generic...]
-Compiling architecture structure of entity xil_defaultlib.padded_image_blk_mem_gen_top [padded_image_blk_mem_gen_top_def...]
-Compiling architecture structure of entity xil_defaultlib.padded_image_blk_mem_gen_v8_4_4_synth [padded_image_blk_mem_gen_v8_4_4_...]
-Compiling architecture structure of entity xil_defaultlib.padded_image_blk_mem_gen_v8_4_4 [padded_image_blk_mem_gen_v8_4_4_...]
-Compiling architecture structure of entity xil_defaultlib.padded_image [padded_image_default]
-Compiling architecture behavioral of entity xil_defaultlib.tb_padding
-Built simulation snapshot tb_padding_behav
+Compiling architecture behavioral of entity xil_defaultlib.ram_to_text [ram_to_text_default]
+Compiling architecture behavioral of entity xil_defaultlib.tb_ram_to_text
+Built simulation snapshot tb_ram_to_text_behav

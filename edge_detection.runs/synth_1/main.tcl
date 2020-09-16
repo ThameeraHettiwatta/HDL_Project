@@ -18,46 +18,45 @@ proc create_report { reportName command } {
   }
 }
 set_param chipscope.maxJobs 2
-set_param xicom.use_bs_reader 1
-set_msg_config -id {Common 17-41} -limit 10000000
 create_project -in_memory -part xc7a35tcpg236-1
 
 set_param project.singleFileAddWarning.threshold 0
 set_param project.compositeFile.enableAutoGeneration 0
 set_param synth.vivado.isSynthRun true
 set_msg_config -source 4 -id {IP_Flow 19-2162} -severity warning -new_severity info
-set_property webtalk.parent_dir D:/code/HDL/HDL_Project/edge_detection.cache/wt [current_project]
-set_property parent.project_path D:/code/HDL/HDL_Project/edge_detection.xpr [current_project]
+set_property webtalk.parent_dir D:/code/hdl2/HDL_Project/edge_detection.cache/wt [current_project]
+set_property parent.project_path D:/code/hdl2/HDL_Project/edge_detection.xpr [current_project]
 set_property XPM_LIBRARIES XPM_MEMORY [current_project]
 set_property default_lib xil_defaultlib [current_project]
 set_property target_language VHDL [current_project]
 set_property board_part digilentinc.com:basys3:part0:1.1 [current_project]
-set_property ip_output_repo d:/code/HDL/HDL_Project/edge_detection.cache/ip [current_project]
+set_property ip_output_repo d:/code/hdl2/HDL_Project/edge_detection.cache/ip [current_project]
 set_property ip_cache_permissions {read write} [current_project]
-add_files D:/code/HDL/HDL_Project/edge_detection.srcs/sources_1/image_ram_init_data.coe
-add_files D:/code/HDL/HDL_Project/edge_detection.srcs/sources_1/ip/padded_image/padded_ram.coe
-add_files D:/code/HDL/HDL_Project/edge_detection.srcs/sources_1/ip/padded_image/padded_ram1.coe
+add_files D:/code/hdl2/HDL_Project/edge_detection.srcs/sources_1/image_ram_init_data.coe
+add_files D:/code/hdl2/HDL_Project/edge_detection.srcs/sources_1/ip/padded_image/padded_ram.coe
+add_files D:/code/hdl2/HDL_Project/edge_detection.srcs/sources_1/ip/padded_image/padded_ram1.coe
+add_files D:/code/hdl2/HDL_Project/edge_detection.srcs/sources_1/ip/input_image/sd.coe
 read_vhdl -library xil_defaultlib {
-  D:/code/HDL/HDL_Project/edge_detection.srcs/sources_1/new/UART.vhd
-  D:/code/HDL/HDL_Project/edge_detection.srcs/sources_1/new/convolve.vhd
-  D:/code/HDL/HDL_Project/edge_detection.srcs/sources_1/new/fsm.vhd
-  D:/code/HDL/HDL_Project/edge_detection.srcs/sources_1/new/padding.vhd
-  D:/code/HDL/HDL_Project/edge_detection.srcs/sources_1/new/uartComms.vhd
-  D:/code/HDL/HDL_Project/edge_detection.srcs/sources_1/new/main.vhd
+  D:/code/hdl2/HDL_Project/edge_detection.srcs/sources_1/new/UART.vhd
+  D:/code/hdl2/HDL_Project/edge_detection.srcs/sources_1/new/convolve.vhd
+  D:/code/hdl2/HDL_Project/edge_detection.srcs/sources_1/new/fsm.vhd
+  D:/code/hdl2/HDL_Project/edge_detection.srcs/sources_1/new/padding.vhd
+  D:/code/hdl2/HDL_Project/edge_detection.srcs/sources_1/new/uartComms.vhd
+  D:/code/hdl2/HDL_Project/edge_detection.srcs/sources_1/new/main.vhd
 }
-read_ip -quiet D:/code/HDL/HDL_Project/edge_detection.srcs/sources_1/ip/input_image/input_image.xci
-set_property used_in_implementation false [get_files -all d:/code/HDL/HDL_Project/edge_detection.srcs/sources_1/ip/input_image/input_image_ooc.xdc]
+read_ip -quiet D:/code/hdl2/HDL_Project/edge_detection.srcs/sources_1/ip/input_image/input_image.xci
+set_property used_in_implementation false [get_files -all d:/code/hdl2/HDL_Project/edge_detection.srcs/sources_1/ip/input_image/input_image_ooc.xdc]
 
-read_ip -quiet D:/code/HDL/HDL_Project/edge_detection.srcs/sources_1/ip/padded_image/padded_image.xci
-set_property used_in_implementation false [get_files -all d:/code/HDL/HDL_Project/edge_detection.srcs/sources_1/ip/padded_image/padded_image_ooc.xdc]
+read_ip -quiet D:/code/hdl2/HDL_Project/edge_detection.srcs/sources_1/ip/padded_image/padded_image.xci
+set_property used_in_implementation false [get_files -all d:/code/hdl2/HDL_Project/edge_detection.srcs/sources_1/ip/padded_image/padded_image_ooc.xdc]
 
-read_ip -quiet D:/code/HDL/HDL_Project/edge_detection.srcs/sources_1/ip/output_image/output_image.xci
-set_property used_in_implementation false [get_files -all d:/code/HDL/HDL_Project/edge_detection.srcs/sources_1/ip/output_image/output_image_ooc.xdc]
+read_ip -quiet D:/code/hdl2/HDL_Project/edge_detection.srcs/sources_1/ip/output_image/output_image.xci
+set_property used_in_implementation false [get_files -all d:/code/hdl2/HDL_Project/edge_detection.srcs/sources_1/ip/output_image/output_image_ooc.xdc]
 
-read_ip -quiet d:/code/HDL/HDL_Project/edge_detection.srcs/sources_1/ip/axi_uartlite_0/axi_uartlite_0.xci
-set_property used_in_implementation false [get_files -all d:/code/HDL/HDL_Project/edge_detection.srcs/sources_1/ip/axi_uartlite_0/axi_uartlite_0_board.xdc]
-set_property used_in_implementation false [get_files -all d:/code/HDL/HDL_Project/edge_detection.srcs/sources_1/ip/axi_uartlite_0/axi_uartlite_0_ooc.xdc]
-set_property used_in_implementation false [get_files -all d:/code/HDL/HDL_Project/edge_detection.srcs/sources_1/ip/axi_uartlite_0/axi_uartlite_0.xdc]
+read_ip -quiet D:/code/hdl2/HDL_Project/edge_detection.srcs/sources_1/ip/axi_uartlite_0/axi_uartlite_0.xci
+set_property used_in_implementation false [get_files -all d:/code/hdl2/HDL_Project/edge_detection.srcs/sources_1/ip/axi_uartlite_0/axi_uartlite_0_board.xdc]
+set_property used_in_implementation false [get_files -all d:/code/hdl2/HDL_Project/edge_detection.srcs/sources_1/ip/axi_uartlite_0/axi_uartlite_0_ooc.xdc]
+set_property used_in_implementation false [get_files -all d:/code/hdl2/HDL_Project/edge_detection.srcs/sources_1/ip/axi_uartlite_0/axi_uartlite_0.xdc]
 
 # Mark all dcp files as not used in implementation to prevent them from being
 # stitched into the results of this synthesis run. Any black boxes in the

@@ -46,35 +46,7 @@ component ram_to_text is
           data_out : out STD_LOGIC_VECTOR(7 DOWNTO 0) );
 end component;
 
---component padding is 
-
---    Port ( input_img : in STD_LOGIC_VECTOR (7 downto 0);                    
---           output_img : out STD_LOGIC_VECTOR (7 downto 0);                  
---           clk : in STD_LOGIC;
---           rst_n : in STD_LOGIC;
---           enable_in : in STD_LOGIC;                                      
---           enable_out : out STD_LOGIC;                                    
---           input_img_enable : out STD_LOGIC_VECTOR(0 DOWNTO 0);           
---           output_img_enable : out STD_LOGIC_VECTOR(0 DOWNTO 0);          
---           input_img_address : out STD_LOGIC_VECTOR (9 downto 0);         
---           output_img_address : out STD_LOGIC_VECTOR (9 downto 0)); 
---end component;  
-
---component input_image is
-
---  Port (clka : IN STD_LOGIC;
---        wea : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
---        addra : IN STD_LOGIC_VECTOR(9 DOWNTO 0);
---        dina : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
---        douta : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
---        clkb : IN STD_LOGIC;
---        web : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
---        addrb : IN STD_LOGIC_VECTOR(9 DOWNTO 0);
---        dinb : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
---        doutb : OUT STD_LOGIC_VECTOR(7 DOWNTO 0));
---end component;
-
-component convolve is                                        
+component padding is 
 
     Port ( input_img_in : in STD_LOGIC_VECTOR (7 downto 0);                    
            output_img_out : out STD_LOGIC_VECTOR (7 downto 0);                  
@@ -85,13 +57,12 @@ component convolve is
            input_img_enable_out : out STD_LOGIC_VECTOR(0 DOWNTO 0);           
            output_img_enable_out : out STD_LOGIC_VECTOR(0 DOWNTO 0);          
            input_img_address_out : out STD_LOGIC_VECTOR (9 downto 0);         
-           output_img_address_out : out STD_LOGIC_VECTOR (9 downto 0));       
-           
-end component;
+           output_img_address_out : out STD_LOGIC_VECTOR (9 downto 0)); 
+end component;  
 
-component padded_image is
+component input_image is
 
-  port (clka : IN STD_LOGIC;
+  Port (clka : IN STD_LOGIC;
         wea : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
         addra : IN STD_LOGIC_VECTOR(9 DOWNTO 0);
         dina : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
@@ -102,6 +73,35 @@ component padded_image is
         dinb : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
         doutb : OUT STD_LOGIC_VECTOR(7 DOWNTO 0));
 end component;
+
+--component convolve is                                        
+
+--    Port ( input_img_in : in STD_LOGIC_VECTOR (7 downto 0);                    
+--           output_img_out : out STD_LOGIC_VECTOR (7 downto 0);                  
+--           clk : in STD_LOGIC;
+--           rst_n : in STD_LOGIC;
+--           enable_in : in STD_LOGIC;                                      
+--           enable_out : out STD_LOGIC;                                    
+--           input_img_enable_out : out STD_LOGIC_VECTOR(0 DOWNTO 0);           
+--           output_img_enable_out : out STD_LOGIC_VECTOR(0 DOWNTO 0);          
+--           input_img_address_out : out STD_LOGIC_VECTOR (9 downto 0);         
+--           output_img_address_out : out STD_LOGIC_VECTOR (9 downto 0));       
+           
+--end component;
+
+--component padded_image is
+
+--  port (clka : IN STD_LOGIC;
+--        wea : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
+--        addra : IN STD_LOGIC_VECTOR(9 DOWNTO 0);
+--        dina : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+--        douta : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
+--        clkb : IN STD_LOGIC;
+--        web : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
+--        addrb : IN STD_LOGIC_VECTOR(9 DOWNTO 0);
+--        dinb : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+--        doutb : OUT STD_LOGIC_VECTOR(7 DOWNTO 0));
+--end component;
 
 
 --define signals
@@ -122,31 +122,7 @@ signal data_out : STD_LOGIC_VECTOR(7 DOWNTO 0);
 
 begin
 
---    pad1 : padding
---        port map ( input_img => input_img,                    
---               output_img => output_img,                 
---               clk => clk,
---               rst_n => rst_n,
---               enable_in => enable_in,                                      
---               enable_out => enable_out,                                  
---               input_img_enable => input_img_enable,           
---               output_img_enable => output_img_enable,     
---               input_img_address => input_img_address,    
---               output_img_address => output_img_address); 
-    
---    input_ram : input_image
---        port map ( clka => clk,                    
---               wea => "0",                 
---               addra => input_img_address,
---               dina => "00000000",
---               douta => input_img,                                      
---               clkb => clk,                                  
---               web => "0",           
---               addrb => "0000000000",     
---               dinb => "00000000",    
---               doutb => doutb); 
-
-    conv1 : convolve
+    pad1 : padding
         port map ( input_img_in => input_img,                    
                output_img_out => output_img,                 
                clk => clk,
@@ -158,7 +134,7 @@ begin
                input_img_address_out => input_img_address,    
                output_img_address_out => output_img_address); 
     
-    input_ram : padded_image
+    input_ram : input_image
         port map ( clka => clk,                    
                wea => "0",                 
                addra => input_img_address,
@@ -169,6 +145,30 @@ begin
                addrb => "0000000000",     
                dinb => "00000000",    
                doutb => doutb); 
+
+--    conv1 : convolve
+--        port map ( input_img_in => input_img,                    
+--               output_img_out => output_img,                 
+--               clk => clk,
+--               rst_n => rst_n,
+--               enable_in => enable_in,                                      
+--               enable_out => enable_out,                                  
+--               input_img_enable_out => input_img_enable,           
+--               output_img_enable_out => output_img_enable,     
+--               input_img_address_out => input_img_address,    
+--               output_img_address_out => output_img_address); 
+    
+--    input_ram : padded_image
+--        port map ( clka => clk,                    
+--               wea => "0",                 
+--               addra => input_img_address,
+--               dina => "00000000",
+--               douta => input_img,                                      
+--               clkb => clk,                                  
+--               web => "0",           
+--               addrb => "0000000000",     
+--               dinb => "00000000",    
+--               doutb => doutb); 
                
     ram_text : ram_to_text
         port map ( data_in => output_img,
@@ -189,38 +189,38 @@ begin
             
         end process;
   
+    convert_to_text : process (clk)
+        variable out_value : line;
+        file padded_ram : text is out "padded_ram.txt";
+        begin
+            if ( clk 'event and clk = '1' ) then
+                if ( output_img_enable = "1" ) then
+                    --write(out_value, to_integer(unsigned(output_img_address)), left, 3);
+                    --write(out_value, string'(","));
+                    write(out_value, to_integer(unsigned(data_out)), left, 3);
+                    writeline(padded_ram, out_value);
+                end if;
+                if ( enable_out = '1' ) then
+                    file_close(padded_ram);
+                end if;
+            end if;
+        end process;  
+
 --    convert_to_text : process (clk)
 --        variable out_value : line;
---        file padded_ram : text is out "padded_ram.txt";
+--        file convoluted_ram : text is out "convoluted_ram.txt";
 --        begin
 --            if ( clk 'event and clk = '1' ) then
 --                if ( output_img_enable = "1" ) then
 --                    write(out_value, to_integer(unsigned(output_img_address)), left, 3);
 --                    write(out_value, string'(","));
 --                    write(out_value, to_integer(unsigned(data_out)), left, 3);
---                    writeline(padded_ram, out_value);
+--                    writeline(convoluted_ram, out_value);
 --                end if;
 --                if ( enable_out = '1' ) then
---                    file_close(padded_ram);
+--                    file_close(convoluted_ram);
 --                end if;
 --            end if;
---        end process;  
-
-    convert_to_text : process (clk)
-        variable out_value : line;
-        file convoluted_ram : text is out "convoluted_ram.txt";
-        begin
-            if ( clk 'event and clk = '1' ) then
-                if ( output_img_enable = "1" ) then
-                    write(out_value, to_integer(unsigned(output_img_address)), left, 3);
-                    write(out_value, string'(","));
-                    write(out_value, to_integer(unsigned(data_out)), left, 3);
-                    writeline(convoluted_ram, out_value);
-                end if;
-                if ( enable_out = '1' ) then
-                    file_close(convoluted_ram);
-                end if;
-            end if;
-        end process;
+--        end process;
 
 end Behavioral;

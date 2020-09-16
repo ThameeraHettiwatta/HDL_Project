@@ -24,7 +24,7 @@ else
 fi
 export LD_LIBRARY_PATH
 
-HD_PWD='D:/code/HDL/HDL_Project/edge_detection.runs/synth_1'
+HD_PWD='D:/code/hdl2/HDL_Project/edge_detection.runs/synth_1'
 cd "$HD_PWD"
 
 HD_LOG=runme.log

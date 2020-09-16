@@ -60,28 +60,26 @@ proc step_failed { step } {
   close $ch
 }
 
-set_msg_config -id {Common 17-41} -limit 10000000
 
 start_step init_design
 set ACTIVE_STEP init_design
 set rc [catch {
   create_msg_db init_design.pb
   set_param chipscope.maxJobs 2
-  set_param xicom.use_bs_reader 1
   create_project -in_memory -part xc7a35tcpg236-1
   set_property board_part digilentinc.com:basys3:part0:1.1 [current_project]
   set_property design_mode GateLvl [current_fileset]
   set_param project.singleFileAddWarning.threshold 0
-  set_property webtalk.parent_dir D:/code/HDL/HDL_Project/edge_detection.cache/wt [current_project]
-  set_property parent.project_path D:/code/HDL/HDL_Project/edge_detection.xpr [current_project]
-  set_property ip_output_repo D:/code/HDL/HDL_Project/edge_detection.cache/ip [current_project]
+  set_property webtalk.parent_dir D:/code/hdl2/HDL_Project/edge_detection.cache/wt [current_project]
+  set_property parent.project_path D:/code/hdl2/HDL_Project/edge_detection.xpr [current_project]
+  set_property ip_output_repo D:/code/hdl2/HDL_Project/edge_detection.cache/ip [current_project]
   set_property ip_cache_permissions {read write} [current_project]
   set_property XPM_LIBRARIES XPM_MEMORY [current_project]
-  add_files -quiet D:/code/HDL/HDL_Project/edge_detection.runs/synth_1/main.dcp
-  read_ip -quiet D:/code/HDL/HDL_Project/edge_detection.srcs/sources_1/ip/input_image/input_image.xci
-  read_ip -quiet D:/code/HDL/HDL_Project/edge_detection.srcs/sources_1/ip/padded_image/padded_image.xci
-  read_ip -quiet D:/code/HDL/HDL_Project/edge_detection.srcs/sources_1/ip/output_image/output_image.xci
-  read_ip -quiet d:/code/HDL/HDL_Project/edge_detection.srcs/sources_1/ip/axi_uartlite_0/axi_uartlite_0.xci
+  add_files -quiet D:/code/hdl2/HDL_Project/edge_detection.runs/synth_1/main.dcp
+  read_ip -quiet D:/code/hdl2/HDL_Project/edge_detection.srcs/sources_1/ip/input_image/input_image.xci
+  read_ip -quiet D:/code/hdl2/HDL_Project/edge_detection.srcs/sources_1/ip/padded_image/padded_image.xci
+  read_ip -quiet D:/code/hdl2/HDL_Project/edge_detection.srcs/sources_1/ip/output_image/output_image.xci
+  read_ip -quiet D:/code/hdl2/HDL_Project/edge_detection.srcs/sources_1/ip/axi_uartlite_0/axi_uartlite_0.xci
   read_xdc D:/code/HDL/config.xdc
   link_design -top main -part xc7a35tcpg236-1
   close_msg_db -file init_design.pb

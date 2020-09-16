@@ -33,7 +33,7 @@ use IEEE.NUMERIC_STD.ALL;
 
 entity convolve is generic (
      pixel_depth_g: integer := 8;                                                         --bit depth of an individual pixel
-     input_width_g : integer := 25;                                                        --width of input image in pixels
+     input_width_g : integer := 27;                                                        --width of input image in pixels
      address_width_g : integer := 10);                                                    --width of memory address (can address upto 2^10 individual pixels)
 
     Port ( input_img_in : in STD_LOGIC_VECTOR (pixel_depth_g-1 downto 0);                    -- data bus for incoming image (input ram)
@@ -68,7 +68,7 @@ convolve_image : process (clk, input_img_in, rst_n, enable_in)
     constant kernel_width : integer := 3;                                               --width of kernel used in pixels
     constant kernel_size : integer := kernel_width * kernel_width;                      --size of kernel in pixels
     type int_array is array(0 to kernel_size-1) of integer;                             --integer array type for holding convolution kernel
-    constant conv_kernel : int_array := (-1,-1,-1,-1,8,-1,-1,-1,-1);                    --values for convolution kernel
+    -- constant conv_kernel : int_array := (-1,-1,-1,-1,8,-1,-1,-1,-1);                    --values for convolution kernel
     variable output_pixel_counter : integer := 0;                                       --used for stepping through each pixel in output image (0 -> output_img_size)
     variable kernel_pixel_counter : integer := 0;                                       --used for stepping through each value in kernel (0 -> 9)
     variable img_pixel : integer := 0;                                                  --used for storing image pixel value read from ram
@@ -104,10 +104,15 @@ convolve_image : process (clk, input_img_in, rst_n, enable_in)
                 
                 --read a value from the kernel, multiply and add to the sum
                 if (kernel_pixel_counter = 3) then                                                          --restart calculations from zero
-                    output_img_enable_out <= "0";                                                               --turn off data writing
-                    conv_sum := (img_pixel * conv_kernel((kernel_pixel_counter-3)mod kernel_size));         --start sum from zero
+                    output_img_enable_out <= "0";                                                           --turn off data writing
+                    conv_sum := (img_pixel * (-1) );                                                        --start sum from zero
                 else
-                    conv_sum := conv_sum + (img_pixel * conv_kernel((kernel_pixel_counter-3)mod kernel_size));
+                    if (kernel_pixel_counter = 7) then
+                        conv_sum := conv_sum + (img_pixel * (8) );
+                    else
+                        conv_sum := conv_sum - img_pixel;
+                    end if;
+                    --conv_sum := conv_sum + (img_pixel * conv_kernel((kernel_pixel_counter-3)mod kernel_size));
                 end if;
                                
                 if (kernel_pixel_counter = 2) then                                                          --send pixel value to ram

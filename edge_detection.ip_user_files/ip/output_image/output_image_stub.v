@@ -1,10 +1,10 @@
 // Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2019.2 (win64) Build 2708876 Wed Nov  6 21:40:23 MST 2019
-// Date        : Tue Sep 15 15:54:01 2020
+// Date        : Tue Sep 15 15:54:00 2020
 // Host        : SkyNet running 64-bit major release  (build 9200)
-// Command     : write_verilog -force -mode synth_stub
-//               D:/code/HDL/HDL_Project/edge_detection.srcs/sources_1/ip/output_image/output_image_stub.v
+// Command     : write_verilog -force -mode synth_stub -rename_top output_image -prefix
+//               output_image_ output_image_stub.v
 // Design      : output_image
 // Purpose     : Stub declaration of top-level module interface
 // Device      : xc7a35tcpg236-1

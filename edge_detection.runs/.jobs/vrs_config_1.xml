@@ -1,6 +1,19 @@
 <?xml version="1.0"?>
 <Runs Version="1" Minor="0">
-	<Run Id="blk_mem_gen_0_synth_1" LaunchDir="/home/haritha/edge_detection/edge_detection.runs/blk_mem_gen_0_synth_1" FlowId="Vivado_Synthesis" FromStepId="vivado" ToStepId="vivado"/>
+	<Run Id="padded_image_synth_1" LaunchDir="D:/code/hdl2/HDL_Project/edge_detection.runs/padded_image_synth_1" FlowId="Vivado_Synthesis" FromStepId="vivado" ToStepId="vivado"/>
+	<Run Id="output_image_synth_1" LaunchDir="D:/code/hdl2/HDL_Project/edge_detection.runs/output_image_synth_1" FlowId="Vivado_Synthesis" FromStepId="vivado" ToStepId="vivado"/>
+	<Run Id="axi_uartlite_0_synth_1" LaunchDir="D:/code/hdl2/HDL_Project/edge_detection.runs/axi_uartlite_0_synth_1" FlowId="Vivado_Synthesis" FromStepId="vivado" ToStepId="vivado"/>
+	<Run Id="synth_1" LaunchDir="D:/code/hdl2/HDL_Project/edge_detection.runs/synth_1" FlowId="Vivado_Synthesis" FromStepId="vivado" ToStepId="vivado">
+		<Parent Id="padded_image_synth_1"/>
+		<Parent Id="output_image_synth_1"/>
+		<Parent Id="axi_uartlite_0_synth_1"/>
+	</Run>
+	<Run Id="impl_1" LaunchDir="D:/code/hdl2/HDL_Project/edge_detection.runs/impl_1" FlowId="Vivado_Implementation" FromStepId="init_design" ToStepId="write_bitstream">
+		<Parent Id="synth_1"/>
+		<Parent Id="padded_image_synth_1"/>
+		<Parent Id="output_image_synth_1"/>
+		<Parent Id="axi_uartlite_0_synth_1"/>
+	</Run>
 	<Parameters>
 		<Parameter Name="runs.monitorLSFJobs" Val="true" Type="bool"/>
 		<Parameter Name="runs.enableClusterConf" Val="true" Type="bool"/>

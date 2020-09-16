@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GenRun Id="axi_uartlite_0_synth_1" LaunchPart="xc7a35tcpg236-1" LaunchTime="1600061399">
+<GenRun Id="axi_uartlite_0_synth_1" LaunchPart="xc7a35tcpg236-1" LaunchTime="1600228186">
   <File Type="PA-TCL" Name="axi_uartlite_0.tcl"/>
   <File Type="RDS-PROPCONSTRS" Name="axi_uartlite_0_drc_synth.rpt"/>
   <File Type="REPORTS-TCL" Name="axi_uartlite_0_reports.tcl"/>
@@ -42,9 +42,7 @@
     </Config>
   </FileSet>
   <Strategy Version="1" Minor="2">
-    <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2019">
-      <Desc>Vivado Synthesis Defaults</Desc>
-    </StratHandle>
+    <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2019"/>
     <Step Id="synth_design"/>
   </Strategy>
 </GenRun>

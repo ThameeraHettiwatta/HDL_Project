@@ -101,7 +101,7 @@ end component;
 
 component convolve is generic (
      pixel_depth_g: integer := 8;                                                         --bit depth of an individual pixel
-     input_width_g : integer := 25;                                                        --width of input image in pixels
+     input_width_g : integer := 27;                                                        --width of input image in pixels
      address_width_g : integer := 10);                                                    --width of memory address (can address upto 2^10 individual pixels)
                                         
     Port ( input_img_in : in STD_LOGIC_VECTOR (pixel_depth_g-1 downto 0);                    
@@ -218,7 +218,7 @@ begin
 
     padded_ram : padded_image
         port map ( clka => clk,                    
-                   wea => output_img_enable_out_padding,                 
+                   wea => output_img_enable_out_padding ,                 
                    addra => output_img_address_out_padding,
                    dina => output_img_padding,                                      
                    clkb => clk,                                  
@@ -236,7 +236,7 @@ begin
                    web => output_img_enable_out_uart,           
                    addrb => output_img_address_out_uart,     
                    dinb => "00000000",    
-                   doutb => output_img_uart); 
+                   doutb =>  output_img_uart); 
 
     fsm1 : fsm
         port map ( clk => clk,
