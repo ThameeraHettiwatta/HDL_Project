@@ -58,9 +58,9 @@ end UART;
 architecture Behavioral of UART is
 
 component uartComms is
-    Generic (mem_addr_size_g : integer := 10;
-             pixel_data_size_g : integer := 8;
-             base_val : integer := 0);
+    Generic (address_width_g : integer := address_width_g;
+             pixel_depth_g : integer := pixel_depth_g;
+             input_width_g : integer := input_width_g);
 
     Port ( clk : in STD_LOGIC;
            rst_n : in STD_LOGIC;
@@ -68,12 +68,6 @@ component uartComms is
            start_send_in : in STD_LOGIC;
            finished_rec_out : out STD_LOGIC;
            finished_send_out : out STD_LOGIC;
-           output_image_add_out : out STD_LOGIC_VECTOR (mem_addr_size_g -1 downto 0);
-           input_image_add_out : out STD_LOGIC_VECTOR (mem_addr_size_g -1 downto 0);
-           ioi_dina_out : out STD_LOGIC_VECTOR (pixel_data_size_g -1 downto 0);
-           ioi_douta_in : in STD_LOGIC_VECTOR (pixel_data_size_g -1 downto 0);
-           input_img_we_out : out STD_LOGIC_VECTOR (0 downto 0);
-           output_img_we_out : out STD_LOGIC_VECTOR (0 downto 0);
            uart_interrupt_in : in STD_LOGIC;
            uart_s_axi_awaddr_out : out STD_LOGIC_VECTOR(3 DOWNTO 0);
            uart_s_axi_awvalid_out : out STD_LOGIC;
@@ -91,7 +85,14 @@ component uartComms is
            uart_s_axi_rdata_in : in STD_LOGIC_VECTOR(31 DOWNTO 0);
            uart_s_axi_rresp_in : in STD_LOGIC_VECTOR(1 DOWNTO 0);
            uart_s_axi_rvalid_in : in STD_LOGIC;
-           uart_s_axi_rready_out : out STD_LOGIC);
+           uart_s_axi_rready_out : out STD_LOGIC;
+           output_image_add_out : out STD_LOGIC_VECTOR (address_width_g -1 downto 0);
+           input_image_add_out : out STD_LOGIC_VECTOR (address_width_g -1 downto 0);
+           output_img_out : out STD_LOGIC_VECTOR (pixel_depth_g -1 downto 0);
+           input_img_in : in STD_LOGIC_VECTOR (pixel_depth_g -1 downto 0);
+           input_img_we_out : out STD_LOGIC_VECTOR (0 downto 0);
+           output_img_we_out : out STD_LOGIC_VECTOR (0 downto 0));
+
 end component;
 
 component axi_uartlite_0 is
@@ -158,12 +159,6 @@ uart_communication_unit_1_comm : uartComms
               start_send_in => write_en_in,
               finished_send_out => write_done_out,
               finished_rec_out => read_done_out,
-              output_image_add_out => output_img_address_out,
-              input_image_add_out => input_img_address_out,
-              ioi_douta_in => input_img_in,
-              ioi_dina_out => output_img_out,
-              input_img_we_out => input_img_enable_out,
-              output_img_we_out => output_img_enable_out,
               uart_interrupt_in => interrupt_auu_to_comm,
               uart_s_axi_awaddr_out => s_axi_awaddr_comm_to_auu,
               uart_s_axi_awvalid_out => s_axi_awvalid_comm_to_auu,
@@ -181,7 +176,13 @@ uart_communication_unit_1_comm : uartComms
               uart_s_axi_rdata_in => s_axi_rdata_auu_to_comm,
               uart_s_axi_rresp_in => s_axi_rresp_auu_to_comm,
               uart_s_axi_rvalid_in => s_axi_rvalid_auu_to_comm,
-              uart_s_axi_rready_out => s_axi_rready_comm_to_auu);
+              uart_s_axi_rready_out => s_axi_rready_comm_to_auu,
+              output_image_add_out => output_img_address_out,
+              input_image_add_out => input_img_address_out,
+              input_img_in => input_img_in,
+              output_img_out => output_img_out,
+              input_img_we_out => input_img_enable_out,
+              output_img_we_out => output_img_enable_out);
 
 axi_uartlite_module_1_auu : axi_uartlite_0
     port map (s_axi_aclk => clk,

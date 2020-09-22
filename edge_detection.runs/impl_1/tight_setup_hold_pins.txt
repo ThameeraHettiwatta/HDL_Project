@@ -1,8 +1,9 @@
 +--------------------------+--------------------------+----------------------------------------------------------------------------------------------------------+
 |       Launch Clock       |      Capture Clock       |                                                 Pin                                                      |
 +--------------------------+--------------------------+----------------------------------------------------------------------------------------------------------+
-|              sys_clk_pin |              sys_clk_pin |                                                                                 pad1/img_y_index_reg[3]/D|
+|              sys_clk_pin |              sys_clk_pin |                                                                       pad1/input_img_address_out_reg[1]/D|
+|              sys_clk_pin |              sys_clk_pin |                                                                                 pad1/img_y_index_reg[6]/D|
 |              sys_clk_pin |              sys_clk_pin |                                                                                 pad1/img_y_index_reg[8]/D|
 |              sys_clk_pin |              sys_clk_pin |                                                                                 pad1/img_y_index_reg[9]/D|
-|              sys_clk_pin |              sys_clk_pin |                                                                                 pad1/img_x_index_reg[2]/D|
+|              sys_clk_pin |              sys_clk_pin |                                                                                 pad1/img_y_index_reg[7]/D|
 +--------------------------+--------------------------+----------------------------------------------------------------------------------------------------------+

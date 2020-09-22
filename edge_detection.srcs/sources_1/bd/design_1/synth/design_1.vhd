@@ -1,0 +1,9 @@
+--Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
+----------------------------------------------------------------------------------
+--Tool Version: Vivado v.2019.2 (win64) Build 2708876 Wed Nov  6 21:40:23 MST 2019
+--Date        : Tue Sep 22 14:07:06 2020
+--Host        : SkyNet running 64-bit major release  (build 9200)
+--Command     : generate_target design_1.bd
+--Design      : design_1
+--Purpose     : IP block netlist
+----------------------------------------------------------------------------------

@@ -2,7 +2,7 @@
 -- Company: 
 -- Engineer: 
 -- 
--- Create Date: 07/19/2020 06:05:14 PM
+-- Create Date: 07/21/2020 09:34:11 PM
 -- Design Name: 
 -- Module Name: uart_receive - Behavioral
 -- Project Name: 
@@ -25,112 +25,49 @@ use IEEE.NUMERIC_STD.ALL;
 
 
 entity uartComms is
-    Generic (mem_addr_size_g : integer := 10; --holds memory address length.
-             pixel_data_size_g : integer := 8; --holds pixel data bit length.
-             base_val_g : integer := 0);--holds basic initialization value(0).
-
+    Generic (address_width_g : integer := 10;                                                               --width of memory address (can address upto 2^10 individual pixels)
+             pixel_depth_g : integer := 8;                                                                  --bit depth of an individual pixel
+            input_width_g : integer := 25);                                                                 --width of input image in pixels
+            
     Port ( clk : in STD_LOGIC;
            rst_n : in STD_LOGIC;
-           --oignal to start the communication process.
-           start_rec_in : in STD_LOGIC;
-           --outputs finish signal of the communication process.
-           finished_rec_out : out STD_LOGIC := '0';
-           --oignal to start the communication process.
-           start_send_in : in STD_LOGIC;
-           --outputs finish signal of the communication process.
-           finished_send_out : out STD_LOGIC := '0';
-           --address for input/output ram
-           output_image_add_out : out STD_LOGIC_VECTOR (mem_addr_size_g -1 downto 0) := std_logic_vector(to_unsigned(base_val_g, mem_addr_size_g));
-           input_image_add_out : out STD_LOGIC_VECTOR (mem_addr_size_g -1 downto 0) := std_logic_vector(to_unsigned(base_val_g, mem_addr_size_g));
-           --data in bus for input/output ram.
-           ioi_dina_out : out STD_LOGIC_VECTOR (pixel_data_size_g -1 downto 0) := std_logic_vector(to_unsigned(base_val_g, pixel_data_size_g));
-           --data out bus from input/output ram.
-           ioi_douta_in : in STD_LOGIC_VECTOR (pixel_data_size_g -1 downto 0);
-           --write enable signal for input/output ram
-           input_img_we_out : out STD_LOGIC_VECTOR (0 downto 0) := "0";
-           output_img_we_out : out STD_LOGIC_VECTOR (0 downto 0) := "0";
-           --interrupt signal from axi uartlite communication unit. 
-           uart_interrupt_in : in STD_LOGIC;
-           --write address to axi uartlite communication unit.
-           uart_s_axi_awaddr_out : out STD_LOGIC_VECTOR(3 DOWNTO 0) := "0000";
-           --write address valid signal to axi uartlite communication unit.
-           uart_s_axi_awvalid_out : out STD_LOGIC := '0';
-           --write address ready signal from axi uartlite communication unit.
-           uart_s_axi_awready_in : in STD_LOGIC;
-           --write data to axi uartlite communication unit.
-           uart_s_axi_wdata_out : out STD_LOGIC_VECTOR(31 DOWNTO 0) := std_logic_vector(to_unsigned(base_val_g, 32));
-           ----write strobe selection to axi uartlite communication unit.
-           uart_s_axi_wstrb_out : out STD_LOGIC_VECTOR(3 DOWNTO 0) := "0001";
-           --write data valid signal to axi uartlite communication unit.
-           uart_s_axi_wvalid_out : out STD_LOGIC := '0';
-           --write data ready signal from axi uartlite communication unit.
-           uart_s_axi_wready_in : in STD_LOGIC;
-           --write response from axi uartlite communication unit.
-           uart_s_axi_bresp_in : in STD_LOGIC_VECTOR(1 DOWNTO 0);
-           --write reponse valid signal from axi uartlite communication unit.
-           uart_s_axi_bvalid_in : in STD_LOGIC;
-           --write response ready signal to axi uartlite communication unit.
-           uart_s_axi_bready_out : out STD_LOGIC := '0';
-           --read address to axi uartlite communication unit.
-           uart_s_axi_araddr_out : out STD_LOGIC_VECTOR(3 DOWNTO 0) := "0000";
-           --read address valid signal to axi uartlite communication unit.
-           uart_s_axi_arvalid_out : out STD_LOGIC := '0';
-           --read address ready signal from axi uartlite communication unit.
-           uart_s_axi_arready_in : in STD_LOGIC;
-           --read data from axi uartlite communication unit.
-           uart_s_axi_rdata_in : in STD_LOGIC_VECTOR(31 DOWNTO 0);
-           --read data response from axi uartlite communication unit.
-           uart_s_axi_rresp_in : in STD_LOGIC_VECTOR(1 DOWNTO 0);
-           --read data valid signal from axi uartlite communication unit.
-           uart_s_axi_rvalid_in : in STD_LOGIC;
-           --read ready signal to axi uartlite communication unit.
-           uart_s_axi_rready_out : out STD_LOGIC := '0');
+           start_rec_in : in STD_LOGIC;                                                                     --begin recieving data
+           finished_rec_out : out STD_LOGIC := '0';                                                         --notify end of data receipt
+           start_send_in : in STD_LOGIC;                                                                    --begin sending data
+           finished_send_out : out STD_LOGIC := '0';                                                        --notify end of data transmission
+           uart_interrupt_in : in STD_LOGIC;                                                                --uart interrupt
+           uart_s_axi_awaddr_out : out STD_LOGIC_VECTOR(3 DOWNTO 0) := "0000";                              --uart output write address
+           uart_s_axi_awvalid_out : out STD_LOGIC := '0';                                                   --uart write address valid
+           uart_s_axi_awready_in : in STD_LOGIC;                                                            --uart read address ready
+           uart_s_axi_wdata_out : out STD_LOGIC_VECTOR(31 DOWNTO 0) := std_logic_vector(to_unsigned(0, 32));--uart output data port
+           uart_s_axi_wstrb_out : out STD_LOGIC_VECTOR(3 DOWNTO 0) := "0001";                               --uart write strobe selection                               
+           uart_s_axi_wvalid_out : out STD_LOGIC := '0';                                                    --uart write data valid
+           uart_s_axi_wready_in : in STD_LOGIC;                                                             --uart write data ready
+           uart_s_axi_bresp_in : in STD_LOGIC_VECTOR(1 DOWNTO 0);                                           --uart write done input
+           uart_s_axi_bvalid_in : in STD_LOGIC;                                                             --uart write ready input
+           uart_s_axi_bready_out : out STD_LOGIC := '0';                                                    --uart  write data ready
+           uart_s_axi_araddr_out : out STD_LOGIC_VECTOR(3 DOWNTO 0) := "0000";                              --uart input read address
+           uart_s_axi_arvalid_out : out STD_LOGIC := '0';                                                   --uart input address valid
+           uart_s_axi_arready_in : in STD_LOGIC;                                                            --uart read address ready
+           uart_s_axi_rdata_in : in STD_LOGIC_VECTOR(31 DOWNTO 0);                                          --uart input data port
+           uart_s_axi_rresp_in : in STD_LOGIC_VECTOR(1 DOWNTO 0);                                           --uart read done input
+           uart_s_axi_rvalid_in : in STD_LOGIC;                                                             --uart read data valid input
+           uart_s_axi_rready_out : out STD_LOGIC := '0';                                                   --uart ready to read
+           output_image_add_out : out STD_LOGIC_VECTOR (address_width_g -1 downto 0) := std_logic_vector(to_unsigned(0, address_width_g));  --output img ram address
+           input_image_add_out : out STD_LOGIC_VECTOR (address_width_g -1 downto 0) := std_logic_vector(to_unsigned(0, address_width_g));   --input img ram address
+           output_img_out : out STD_LOGIC_VECTOR (pixel_depth_g -1 downto 0) := std_logic_vector(to_unsigned(0, pixel_depth_g));            --data port for output img ram
+           input_img_in : in STD_LOGIC_VECTOR (pixel_depth_g -1 downto 0);                                                                  --data port for input img ram
+           input_img_we_out : out STD_LOGIC_VECTOR (0 downto 0) := "0";                                     --write elable for input img ram
+           output_img_we_out : out STD_LOGIC_VECTOR (0 downto 0) := "0");                                    --write enable for output img ram
+
 end uartComms;
 
 architecture Behavioral of uartComms is
 
--- There are 9 main states in this fsm.
--- 1. Idle - The fsm waits in the Idle state untill the start_op_in signal gets
--- high. With start signal, it also receives the operation select signal which
--- determines the send of reveive operation to conduct. Then it goes to
--- Set_CTRL_Reg state.
--- 2. Set_CTRL_Reg - In this state, the fsm goes through series of sub states
--- of axi related data teansfer, which are responsible for setting up the
--- control register of axi uart lite communication unit. After this setup,
--- fsm moves to Fetching(send) of Receiving(receive) state based on the
--- operation select signal reveived on the Idle state.
--- 3. Fetching - In fetching state, fsm fetches the data in the next location
--- to be sent on the input/output ram. After acuqiring the data, fsm moves to
--- sending state.
--- 4. Sending - In the sending state, the fsm goes through a series of sub states
--- of axi related data transfer, which are responsible for writing the previously
--- fetched value to the uart tx fifo. After successfully completing the data
--- write, fsm moves into Incermenting_Send state.
--- 5. Incermenting_Send - In the incermenting_Send state, fsm evaluate the
--- current memory address. If the address is the final one, then the fsm moves
--- to Done state. If there are more locations, fsm increments the address by 1
--- and moves to Fetching state again.
--- 6. Receiving - In the receiving state, the fsm waits till an interrupt from
--- the axi uart lite communication unit, with it fsm move through a series of sub
--- states of axi related data transfer, which are responsible for reading the
--- uart rx fifo for received data. After successfully reading the data, fsm moves
--- to Storing state.
--- 7. Storing - In this state, the previously received data is written in to the
--- next location of the input/outut ram. After writing the data, fsm moves to
--- Increment_Rec state.
--- 8. Increment_Rec - In this state, fsm evaluate the current memory address.
--- If the address is the final one, then the fsm moves to Done state. If there
--- are more locations, fsm increments the address by 1 and moves to Receiving
--- state again.
--- 9. Done - In the done state, fsm signals the finished_op_out signal and
--- moves to Idle state.
-
 type main_state is (Idle, Set_CTRL_Reg, Fetching, Sending, Receiving, Storing, Incrementing_Send, Incrementing_Rec, Done);
 signal comm_state : main_state;
 
--- There are 16 states which are related to axi data transfer operations.
--- These states represents the process of axi-4 lite read and write
--- operations
+-- AXI data transfer states
 
 type axi_state is (Set_Rx_Write_Up, Wait_Rx_Ready, Set_Tx_Write_Down,
                    Set_Write_Resp_Up, Set_Write_Resp_Down, Wait_Tx_Done,
@@ -138,39 +75,29 @@ type axi_state is (Set_Rx_Write_Up, Wait_Rx_Ready, Set_Tx_Write_Down,
                    Set_CR_Normal, Get_Rx_Data, Set_Read_Ready_High,
                    Set_Read_Ready_Low, Interrupt_wait,
                    Set_Tx_Write_Up, Wait_Tx_Ready);
---siganl to hold axi substates of reading the uart rx fifo buffer.
-signal axi_rx_sub_state : axi_state;
---siganl to hold axi substates of writing to the uart tx fifo buffer.
-signal axi_tx_sub_state : axi_state;
---siganl to hold axi substates of writing to the uart control register.
+signal axi_rx_sub_state : axi_state; --axi reciever substates
+signal axi_tx_sub_state : axi_state; --axi transmitter substates
+
 signal axi_set_cr_sub_state : axi_state;
---signal to hold the pixel data.
-signal pix_data : STD_LOGIC_VECTOR (pixel_data_size_g -1 downto 0);
---signal to hold the send/receive operation.
-signal rec_op : STD_LOGIC;
+signal img_pixel : STD_LOGIC_VECTOR (pixel_depth_g -1 downto 0);                -- used to currently pixel data
+
+signal rec_op : STD_LOGIC;                                                      -- used to indicate receiving / sending
 
 begin
 
     process (clk, rst_n)
-        --holds the input/output ram size.
-        constant mem_size : integer := 625;
-        -- time to wait after writing to input/output ram.
-        constant write_wait_delay : integer := 3;
-        -- time to wait after setting read address to input/output ram.
-        constant fetch_wait_delay : integer := 3;
-        --holds next memory location address.
-        variable mem_addra : integer := 0;
-        --holds how much time waited in the write wait. 
-        variable write_wait : integer := 0;
-        --holds how much time waited in the fetch wait
-        variable fetch_wait : integer := 0;
-        --holds the progress of setting uart control register.
-        variable clear_rx_tx : STD_LOGIC := '1';
+        constant img_size : integer := input_width_g * input_width_g;           -- image size (width x width)
+        constant write_wait_delay : integer := 3;                               -- read delay of 3 cycles (1 cycle to update address + 2 cycles delay from IP core), therefore memory read is delayed by 3 cycles
+        constant fetch_wait_delay : integer := 3;                               -- read delay of 3 cycles (1 cycle to update address + 2 cycles delay from IP core), therefore memory read is delayed by 3 cycles
+        variable mem_addra : integer := 0;                                      -- memory address for reading and writing
+        variable write_wait : integer := 0;                                     -- delay for writing data
+        variable fetch_wait : integer := 0;                                     -- delay for fetching data
+        variable clear_rx_tx : STD_LOGIC := '1';                                -- indicate if the ccurrent data can be cleared
+       
         begin
-            --active low reset. Resets all progress back to Idle state.
             if (rst_n = '0') then
                 comm_state <= Idle;
-                pix_data <= std_logic_vector(to_unsigned(base_val_g, pix_data 'length));
+                img_pixel <= std_logic_vector(to_unsigned(0, img_pixel 'length));
                 mem_addra := 0;
                 write_wait := 0;
                 clear_rx_tx := '1';
@@ -179,12 +106,13 @@ begin
                 rec_op <= '0';
             elsif (clk 'event and clk = '1') then
                 case comm_state is
+                    --idle state - system is awaiting a signal to begin either sending or receiving data.
                     when Idle =>
                         input_img_we_out <= "0";
                         output_img_we_out <= "0";
                         --finished_rec_out <= '0';
                         --finished_send_out <= '0';
-                        pix_data <= std_logic_vector(to_unsigned(base_val_g, pix_data 'length));
+                        img_pixel <= std_logic_vector(to_unsigned(0, img_pixel 'length));
                         if (start_rec_in = '1') then
                             rec_op <= '1';
                         end if;
@@ -196,6 +124,8 @@ begin
                             axi_set_cr_sub_state <= Set_CR_Write_Up;
                             clear_rx_tx := '1';
                         end if;
+                        
+                    --prepare for data transmission by completing the required axi sub states.  Move to either fetching or receiving state when ready
                     when Set_CTRL_Reg =>
                         case axi_set_cr_sub_state is
                             when Set_CR_Write_Up =>
@@ -256,6 +186,8 @@ begin
                             when others =>
                                 null;
                         end case;
+                        
+                    --Upon receiving interrupt from uart module indicating data is ready, read data from uart module
                     when Receiving =>
                         case axi_rx_sub_state is
                             when Interrupt_wait =>
@@ -284,7 +216,7 @@ begin
                                 uart_s_axi_rready_out<='1';
                                 if (uart_s_axi_rvalid_in = '1') then
                                     --if read data valid, read it.
-                                    pix_data <= std_logic_vector(resize(unsigned(uart_s_axi_rdata_in), ioi_dina_out 'length));
+                                    img_pixel <= std_logic_vector(resize(unsigned(uart_s_axi_rdata_in), output_img_out 'length));
                                     axi_rx_sub_state <= Set_Read_Ready_Low;
                                 end if;
                             when Set_Read_Ready_Low =>
@@ -295,11 +227,13 @@ begin
                             when others =>
                                 null;
                         end case;
+                    
+                    --store received data in memory
                     when Storing =>
                         if (write_wait = 0) then
                             --write received data to current memory loaction and wait.
                             output_image_add_out <= std_logic_vector(to_unsigned(mem_addra, output_image_add_out 'length));
-                            ioi_dina_out <= pix_data;
+                            output_img_out <= img_pixel;
                             output_img_we_out <= "1";
                             write_wait := 1;
                         elsif (write_wait = write_wait_delay) then
@@ -311,6 +245,8 @@ begin
                         else
                             write_wait := write_wait + 1;
                         end if;
+                        
+                    --fetch data from memory in order to transmit. When data is ready, move to sending state
                     when Fetching =>
                         if (fetch_wait = 0) then
                             --set address to read from current memory loaction.
@@ -320,20 +256,22 @@ begin
                         elsif (fetch_wait = fetch_wait_delay) then
                             --if read wait is over, read the data and move to
                             --sending state. 
-                            pix_data <= ioi_douta_in;
+                            img_pixel <= input_img_in;
                             fetch_wait := 0;
                             comm_state <= Sending;
                             axi_tx_sub_state <= Set_Tx_Write_Up;
                         else
                             fetch_wait := fetch_wait + 1;
                         end if;
+                        
+                    --send fetched data using the uart module
                     when Sending =>
                         case axi_tx_sub_state is
                             when Set_Tx_Write_Up =>
                                 --set write address to uart tx fifo.
                                 --set fetched pixel data as write data.
                                 uart_s_axi_awaddr_out <= "0100";
-                                uart_s_axi_wdata_out <= std_logic_vector(resize(unsigned(pix_data), uart_s_axi_wdata_out 'length));
+                                uart_s_axi_wdata_out <= std_logic_vector(resize(unsigned(img_pixel), uart_s_axi_wdata_out 'length));
                                 --set write address and write data valid.
                                 uart_s_axi_awvalid_out <= '1';
                                 uart_s_axi_wvalid_out <= '1';
@@ -370,9 +308,11 @@ begin
                             when others =>
                                 null;
                         end case;
+                    
+                    --check if entire image has been recieved, if not, increment the memory location for storing input data
                     when Incrementing_Rec =>
                         output_img_we_out <= "0";
-                        if (mem_addra = mem_size-1) then
+                        if (mem_addra = img_size-1) then
                             --if all data is recieved, move to done state.
                             finished_rec_out <= '1';
                             comm_state <= Done;
@@ -381,8 +321,10 @@ begin
                             mem_addra := mem_addra + 1;
                             comm_state <= Receiving;
                         end if;
+                        
+                    --check if the entire image has been sent, if not, increment memory location for reading output data
                     when Incrementing_Send =>
-                        if (mem_addra = mem_size-1) then
+                        if (mem_addra = img_size-1) then
                             --if all data is sent, move to done state.
                             finished_send_out <= '1';
                             comm_state <= Done;
@@ -391,13 +333,13 @@ begin
                             mem_addra := mem_addra + 1;
                             comm_state <= Fetching;
                         end if;
+                    
+                    --complete transmission of data, and move back into idle state
                     when Done =>
-                        --if operation is done, signal the finished_op_out
-                        --and move to Idle state.
                         mem_addra := 0;
                         write_wait := 0;
                         fetch_wait := 0;
-                        pix_data <= std_logic_vector(to_unsigned(base_val_g, pix_data 'length));
+                        img_pixel <= std_logic_vector(to_unsigned(0, img_pixel 'length));
                         comm_state <= Idle;
                     when others =>
                         null;
